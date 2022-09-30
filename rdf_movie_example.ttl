@@ -1,0 +1,29 @@
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:	<http://www.w3.org/2002/07/owl#> .
+@prefix foaf:	<http://xmlns.com/foaf/0.1/> .
+@prefix dbp:	<http://dbpedia.org/property/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+### Ontology
+dbo:Person rdf:type rdfs:Class .
+
+
+### Instances
+dbr:Cary_Grant rdf:type dbo:Person ;
+    rdfs:label "Cary Grant"@en ;
+    foaf:name "Cary Grant" ;
+    dbo:birthPlace dbr:Bristol ;
+    dbo:birthDate "1904-01-18"^^xsd:date .
+
+dbr:North_by_Northwest dbo:starring dbr:Cary_Grant ,
+    dbr:Eva_Marie_Saint .
+
+dbr:Maisie_Williams rdf:type dbo:Person ;
+    dbo:birthPlace dbr:Bristol .
+
+dbr:Bristol dbp:sisterCity <http://dbpedia.org/resource/Bristol,_Maine> .
+
+
