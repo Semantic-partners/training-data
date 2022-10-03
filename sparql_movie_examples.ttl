@@ -1,0 +1,61 @@
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:	<http://www.w3.org/2002/07/owl#> .
+@prefix wikidata:	<http://www.wikidata.org/entity/> .
+@prefix ns4:	<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix schema:	<http://schema.org/> .
+@prefix viaf: <http://viaf.org/viaf/> .
+@prefix family: <http://example.com/owl/families#> .
+@prefix foaf:	<http://xmlns.com/foaf/0.1/> .
+@prefix dbp:	<http://dbpedia.org/property/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+### Ontology
+dbo:Person rdf:type rdfs:Class .
+ 
+
+### Instances
+dbr:Cary_Grant rdf:type dbo:Person ;
+    rdfs:label "Cary Grant"@en ;
+    foaf:name "Cary Grant"@en ;
+    dbo:birthPlace dbr:Bristol ;
+    dbo:birthDate "1904-01-18"^^xsd:date .
+
+dbr:Maisie_Williams rdf:type dbo:Person ;
+    foaf:name "Maisie Williams"@en ;
+    dbo:birthPlace dbr:Bristol ;
+    dbo:birthDate "1997-04-15"^^xsd:date .
+
+dbr:Charlie_Chaplin rdf:type dbo:Person ;
+    foaf:name "Charlie Chaplin"@en ;
+    dbo:birthPlace dbr:London ;
+    dbo:birthDate "1889-04-16"^^xsd:date .
+
+dbr:Alfred_Hitchcock rdf:type dbo:Person ;
+    foaf:name "Alfred Hitchcock"@en ;
+    dbo:birthPlace dbr:Leytonstone ;
+    dbo:birthDate "1899-08-13"^^xsd:date .
+
+dbr:Orson_Welles rdf:type dbo:Person ;
+    foaf:name "Orson Welles"@en ;
+    dbo:birthPlace <http://dbpedia.org/resource/Kenosha,_Wisconsin> ;
+    dbo:birthDate "1915-05-06"^^xsd:date .
+
+dbr:North_by_Northwest dbo:starring dbr:Cary_Grant ,
+    dbr:Eva_Marie_Saint .
+
+dbr:Bristol dbo:sisterCity <http://dbpedia.org/resource/Bristol,_Maine> ;
+    dbo:country dbr:United_Kingdom .
+
+dbr:London dbo:country dbr:United_Kingdom .
+
+dbr:Leytonstone dbo:country dbr:United_Kingdom .
+
+<http://dbpedia.org/resource/Kenosha,_Wisconsin> dbo:country dbr:United_States .
+
+dbr:United_Kingdom foaf:name "United Kingdom"@en .
+
+dbr:United_States foaf:name "United States of America"@en .
