@@ -1,0 +1,6 @@
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+ASK
+WHERE {
+    dbr:Cary_Grant dbo:birthPlace dbr:Bristol .
+}
