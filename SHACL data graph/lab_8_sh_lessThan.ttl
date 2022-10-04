@@ -1,0 +1,15 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+
+dbr:North_by_Northwest rdf:type dbo:Film ;
+    dbo:gross "9800000.0"^^xsd:double ;
+    dbo:budget "4300000.0"^^xsd:double ;
+
+dbr:The_Road_to_El_Dorado dbo:Film ;
+        dbo:gross "76400000.0"^^xsd:double ;
+        dbo:budget "95000000.0"^^xsd:double .
+
+

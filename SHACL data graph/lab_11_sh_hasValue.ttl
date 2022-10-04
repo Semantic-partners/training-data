@@ -1,0 +1,12 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+dbr:Alfred_Hitchcock dbo:isDirectorOf dbr:North_by_Northwest ,
+    dbr:The_Birds .
+
+##dbr:Alfred_Hitchcock dbo:isDirectorOf dbr:The_Birds .
+
+
+
+

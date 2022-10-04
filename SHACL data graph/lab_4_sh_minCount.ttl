@@ -1,0 +1,11 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+dbr:North_by_Northwest rdf:type dbo:Film;
+dbo:director dbr:Alfred_Hitchcock .
+
+dbo:Citizen_Kane rdf:type dbo:Film .
+
+

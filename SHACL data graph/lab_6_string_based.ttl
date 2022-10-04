@@ -1,0 +1,17 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+dbr:North_by_Northwest rdf:type dbo:Work ;
+     dbo:abstract "North by Northwest is a 1959 American spy thriller film produced and directed by Alfred Hitchcock."@en ,
+		"Der unsichtbare Dritte (Originaltitel North by Northwest) ist ein US-amerikanischer Thriller, der 1959 von Alfred Hitchcock nach einem Drehbuch von Ernest Lehman gedreht wurde."@de .
+
+dbr:North_by_Northwest rdf:type dbo:Work ;
+     dbo:abstract "North by Northwest is a 1959 American spy thriller film."@en , 
+"North by Northwest is a tale of mistaken identity, with an innocent man pursued across the United States by agents of a mysterious organization trying to prevent him from blocking their plan to smuggle microfilm out of the country, which contains government secrets."@en .
+
+dbr:North_by_Northwest rdf:type dbo:Work ;
+	dbo:abstract "La Mort aux trousses (North by Northwest) est un film américain réalisé par Alfred Hitchcock et sorti en 1959."@fr .
+
+

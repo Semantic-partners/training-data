@@ -1,0 +1,17 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:	<http://www.w3.org/2002/07/owl#> .
+
+dbr:Orson_Welles rdf:type dbo:Person ;
+    dbo:occupation "actor" ,
+		"screenwriter" ,
+		"director" ,
+		"producer" .
+
+dbr:Orson_Welles rdf:type dbo:Person ;
+    dbo:occupation dbo:Actor .
+dbo:Actor rdf:type owl:Class .
+
+
+

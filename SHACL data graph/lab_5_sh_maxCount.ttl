@@ -1,0 +1,11 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+dbr:Cary_Grant rdf:type dbo:Person ;
+    dbo:birthDate "1904-01-18"^^xsd:date .
+
+dbr:Charlie_Chaplin  rdf:type dbo:Person ;
+	dbo:birthDate "1889-04-16"^^xsd:date , "1889-04-16T00:00:00"^^xsd:dateTime .
+

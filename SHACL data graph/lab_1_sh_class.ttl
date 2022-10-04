@@ -1,0 +1,9 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+dbr:Citizen_Kane dbo:starring dbr:Orson_Welles .
+dbr:Orson_Welles rdf:type dbo:Actor .
+
+dbr:Citizen_Kane dbo:starring dbr:Dorothy_Comingore .
+dbr:Dorothy_Comingore rdf:type dbo:Director .
