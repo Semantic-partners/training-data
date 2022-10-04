@@ -1,0 +1,11 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix sp: 	<https://www.semanticpartners.com/shacl#> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+
+sp:PropertyExampleShape
+	a sh:PropertyShape ;
+	sh:targetClass dbo:Person ;
+	sh:path rdfs:label ;
+	sh:minCount 1 .

@@ -1,0 +1,12 @@
+@prefix dbo:	<http://dbpedia.org/ontology/> .
+@prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix sp: 	<https://www.semanticpartners.com/shacl#> .
+
+sp:ClassExampleShape 
+	a sh:NodeShape ;
+	sh:targetNode dbr:Citizen_Kane ;
+	sh:property [
+		sh:path dbo:starring ;
+		sh:class dbo:Actor ;
+	] .
