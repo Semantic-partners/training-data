@@ -1,0 +1,11 @@
+## SHACL Playground
+https://shacl.org/playground/
+
+## SHACL W3C Recommendation
+https://www.w3.org/TR/shacl/ 
+
+## SHACL Use Cases and Requirements
+https://www.w3.org/TR/shacl-ucr/
+
+## SHACL Core Cheat Sheet
+https://cpb-us-e1.wpmucdn.com/sites.uw.edu/dist/6/4101/files/2020/05/SHACLCheatSheet.pdf  
