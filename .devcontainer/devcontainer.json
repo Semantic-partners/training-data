@@ -7,7 +7,7 @@
         "faubulous.mentor"
       ],
       "settings": {
-        "mentor.someSetting": "value"
+        "mentor.shacl.enabled": true
       }
     }
   },
