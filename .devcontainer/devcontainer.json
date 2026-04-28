@@ -1,0 +1,15 @@
+{
+  "name": "KG Course",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "faubulous.mentor"
+      ],
+      "settings": {
+        "mentor.someSetting": "value"
+      }
+    }
+  },
+  "postCreateCommand": "pip install rdflib pyshacl"
+}
