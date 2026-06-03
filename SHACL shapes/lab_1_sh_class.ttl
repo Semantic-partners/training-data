@@ -2,10 +2,12 @@
 @prefix sh:     <http://www.w3.org/ns/shacl#> .
 @prefix sp: 	<https://www.semanticpartners.com/shacl#> .
 
-sp:ClassExampleShape
+sp:FilmStarringMustBeActorShape
 	a sh:NodeShape ;
 	sh:targetClass dbo:Film ;
 	sh:property [
 		sh:path dbo:starring ;
 		sh:class dbo:Actor ;
+		sh:name "Starring class" ;
+		sh:message "Values of dbo:starring must be dbo:Actor instances." ;
 	] .
