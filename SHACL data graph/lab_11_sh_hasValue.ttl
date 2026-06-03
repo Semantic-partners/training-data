@@ -1,9 +1,12 @@
 @prefix dbo:	<http://dbpedia.org/ontology/> .
 @prefix dbr:	<http://dbpedia.org/resource/> .
+@prefix ex:	<http://example.com/ns#> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
 
-dbr:Alfred_Hitchcock a dbo:Director ;
-    dbo:isDirectorOf dbr:North_by_Northwest ,
-                     dbr:The_Birds .
+ex:HitchcockFilm rdfs:subClassOf dbo:Film .
 
-dbr:Steven_Spielberg a dbo:Director ;
-    dbo:isDirectorOf dbr:Jaws .
+dbr:Vertigo a ex:HitchcockFilm ;
+    dbo:director dbr:Alfred_Hitchcock .
+
+dbr:Jaws a ex:HitchcockFilm ;
+    dbo:director dbr:Steven_Spielberg .
