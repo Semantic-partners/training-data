@@ -1,0 +1,27 @@
+PREFIX bio:    <http://example.org/bio/>
+PREFIX ex:     <http://example.org/>
+PREFIX family: <http://family.org/>
+PREFIX geo:    <http://geo.org/>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+
+# Cross-domain query that traverses the bridge predicate
+# (bio:wasBornIn) and then the transitive geo:isLocatedIn chain.
+#
+# Run two ways:
+#  - Without reasoning: use a property path `geo:isLocatedIn+`
+#  - With reasoning (GraphDB / OWL Horst / RDFS-Plus): plain
+#    geo:isLocatedIn — the reasoner materialises the transitive closure.
+#
+# Expected result on the lab's sample data: Ada, Turing, Dijkstra,
+# Tim Berners-Lee, Linus (Europe). Hopper, Knuth, Hamilton (not Europe).
+
+SELECT ?personLabel ?townLabel
+WHERE {
+    ?person a family:Person ;
+            rdfs:label ?personLabel ;
+            bio:wasBornIn ?town .
+    ?town rdfs:label ?townLabel ;
+          geo:isLocatedIn+ ?europe .
+    ?europe rdfs:label "Europe" .
+}
+ORDER BY ?personLabel

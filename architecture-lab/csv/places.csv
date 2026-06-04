@@ -1,0 +1,13 @@
+place,kind,located_in
+London,Town,United Kingdom
+Rotterdam,Town,Netherlands
+New York,Town,United States
+Milwaukee,Town,United States
+Helsinki,Town,Finland
+Paoli,Town,United States
+United Kingdom,Country,Europe
+Netherlands,Country,Europe
+United States,Country,North America
+Finland,Country,Europe
+Europe,Continent,
+North America,Continent,

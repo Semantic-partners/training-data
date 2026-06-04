@@ -1,0 +1,27 @@
+@prefix geo:    <http://geo.org/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix sp:     <https://www.semanticpartners.com/shacl#> .
+
+# SHACL shapes for the geographic slice.
+
+sp:TownHasParentShape
+    a sh:NodeShape ;
+    sh:targetClass geo:Town ;
+    sh:property [
+        sh:path geo:isLocatedIn ;
+        sh:class geo:Country ;
+        sh:minCount 1 ;
+        sh:name "Town in a country" ;
+        sh:message "Every geo:Town must be geo:isLocatedIn at least one geo:Country." ;
+    ] .
+
+sp:CountryInContinentShape
+    a sh:NodeShape ;
+    sh:targetClass geo:Country ;
+    sh:property [
+        sh:path geo:isLocatedIn ;
+        sh:class geo:Continent ;
+        sh:minCount 1 ;
+        sh:name "Country in a continent" ;
+        sh:message "Every geo:Country must be geo:isLocatedIn at least one geo:Continent." ;
+    ] .

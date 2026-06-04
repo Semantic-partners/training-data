@@ -1,0 +1,43 @@
+@prefix bio:    <http://example.org/bio/> .
+@prefix family: <http://family.org/> .
+@prefix geo:    <http://geo.org/> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix sp:     <https://www.semanticpartners.com/shacl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+# SHACL shapes for the architecture lab's people slice.
+# Each shape encodes a single invariant; together they assert what a
+# "well-modelled" Person looks like.
+
+sp:PersonHasNameShape
+    a sh:NodeShape ;
+    sh:targetClass family:Person ;
+    sh:property [
+        sh:path <http://www.w3.org/2000/01/rdf-schema#label> ;
+        sh:minCount 1 ;
+        sh:name "Person label" ;
+        sh:message "Every family:Person needs at least one rdfs:label." ;
+    ] .
+
+sp:PersonBirthYearShape
+    a sh:NodeShape ;
+    sh:targetClass family:Person ;
+    sh:property [
+        sh:path bio:birthYear ;
+        sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
+        sh:name "Birth year" ;
+        sh:message "bio:birthYear must be a single xsd:integer." ;
+    ] .
+
+sp:PersonBornInTownShape
+    a sh:NodeShape ;
+    sh:targetClass family:Person ;
+    sh:property [
+        sh:path bio:wasBornIn ;
+        sh:class geo:Town ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:name "Birthplace" ;
+        sh:message "Each Person must have exactly one bio:wasBornIn, pointing at a geo:Town." ;
+    ] .

@@ -1,0 +1,24 @@
+PREFIX ex:     <http://example.org/>
+PREFIX family: <http://family.org/>
+PREFIX bio:    <http://example.org/bio/>
+PREFIX geo:    <http://geo.org/>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+
+# TARQL mapping: people.csv → RDF
+#
+# Each CSV row becomes one ex:person/<id>.
+# Birth town is resolved against the same town IRI minted by places.rq —
+# matching by IRI-encoding the name (spaces → underscores).
+
+CONSTRUCT {
+  ?person a family:Person ;
+          rdfs:label ?name ;
+          bio:birthYear ?year ;
+          bio:wasBornIn ?town .
+}
+WHERE {
+  BIND(IRI(CONCAT("http://example.org/person/", ?id)) AS ?person)
+  BIND(IRI(CONCAT("http://example.org/place/", REPLACE(?birth_town, " ", "_"))) AS ?town)
+  BIND(xsd:integer(?birth_year) AS ?year)
+}

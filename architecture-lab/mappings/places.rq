@@ -1,0 +1,24 @@
+PREFIX ex:   <http://example.org/>
+PREFIX geo:  <http://geo.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# TARQL mapping: places.csv → RDF
+#
+# Each row produces one ex:place/<name> with its type (geo:Town/Country/Continent)
+# and an optional geo:isLocatedIn link to its parent region. Top-level regions
+# (continents in this dataset) have an empty `located_in` column, so the
+# IF-guard skips the link.
+
+CONSTRUCT {
+  ?placeIri a ?kindIri ;
+            rdfs:label ?place ;
+            geo:isLocatedIn ?parentIri .
+}
+WHERE {
+  BIND(IRI(CONCAT("http://example.org/place/", REPLACE(?place, " ", "_"))) AS ?placeIri)
+  BIND(IRI(CONCAT("http://geo.org/", ?kind)) AS ?kindIri)
+  BIND(IF(?located_in = "",
+          ?placeIri,
+          IRI(CONCAT("http://example.org/place/", REPLACE(?located_in, " ", "_")))) AS ?parentIri)
+  FILTER(?parentIri != ?placeIri)
+}

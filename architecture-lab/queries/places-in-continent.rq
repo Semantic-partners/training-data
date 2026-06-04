@@ -1,0 +1,18 @@
+PREFIX geo:  <http://geo.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# Pure geographic query — list every place and the continent it sits in.
+# Demonstrates the transitive closure of geo:isLocatedIn.
+#
+# - Without reasoning: rely on the property path `geo:isLocatedIn+`.
+# - With reasoning: plain `geo:isLocatedIn` against a GraphDB repo with
+#   OWL-Horst / RDFS-Plus, since geo:isLocatedIn is owl:TransitiveProperty.
+
+SELECT ?placeLabel ?continentLabel
+WHERE {
+    ?place rdfs:label ?placeLabel ;
+           geo:isLocatedIn+ ?continent .
+    ?continent a geo:Continent ;
+               rdfs:label ?continentLabel .
+}
+ORDER BY ?continentLabel ?placeLabel

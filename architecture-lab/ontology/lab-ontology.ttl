@@ -1,0 +1,52 @@
+@prefix bio:    <http://example.org/bio/> .
+@prefix family: <http://family.org/> .
+@prefix geo:    <http://geo.org/> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+
+# Minimal ontology for the architecture lab.
+#
+# Reuses the geo:* vocabulary from the Day-1 geospatial exercise so the
+# work from that exercise carries through.
+
+# --- Persons (from the Day-1 Family exercise vocabulary) ---
+
+family:Person a rdfs:Class ;
+    rdfs:label "Person" ;
+    skos:definition "A specimen of the species Homo sapiens." .
+
+# --- Geography (from the Day-1 Geospatial exercise vocabulary) ---
+
+geo:GeographicRegion a rdfs:Class ;
+    rdfs:label "Geographic Region" ;
+    skos:definition "One of the regions that the Earth's landmasses consists of." .
+
+geo:Town a rdfs:Class ;
+    rdfs:label "Town" ;
+    rdfs:subClassOf geo:GeographicRegion .
+
+geo:Country a rdfs:Class ;
+    rdfs:label "Country" ;
+    rdfs:subClassOf geo:GeographicRegion .
+
+geo:Continent a rdfs:Class ;
+    rdfs:label "Continent" ;
+    rdfs:subClassOf geo:GeographicRegion .
+
+geo:isLocatedIn a owl:TransitiveProperty ;
+    rdfs:label "is Located In" ;
+    rdfs:domain geo:GeographicRegion ;
+    rdfs:range geo:GeographicRegion .
+
+# --- The cross-domain bridge ---
+
+bio:wasBornIn a owl:ObjectProperty ;
+    rdfs:label "was Born In" ;
+    skos:definition "Relates a Person to the Town in which they were born." ;
+    rdfs:domain family:Person ;
+    rdfs:range geo:Town .
+
+bio:birthYear a owl:DatatypeProperty ;
+    rdfs:label "birth Year" ;
+    rdfs:domain family:Person .
