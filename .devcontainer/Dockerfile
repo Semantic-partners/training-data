@@ -24,12 +24,18 @@ RUN curl -fsSL "https://dlcdn.apache.org/jena/binaries/apache-jena-${JENA_VERSIO
     && mv "/opt/apache-jena-${JENA_VERSION}" /opt/jena \
     && rm /tmp/jena.tar.gz
 
-# TARQL — SPARQL over CSV
+# TARQL — SPARQL over CSV. The released tarball doesn't preserve the
+# executable bit on the launcher scripts, so chmod after extracting.
 RUN curl -fsSL "https://github.com/tarql/tarql/releases/download/v${TARQL_VERSION}/tarql-${TARQL_VERSION}.tar.gz" \
         -o /tmp/tarql.tar.gz \
     && tar -xzf /tmp/tarql.tar.gz -C /opt \
     && mv "/opt/tarql-${TARQL_VERSION}" /opt/tarql \
+    && chmod +x /opt/tarql/bin/* \
     && rm /tmp/tarql.tar.gz
+
+# Apache Jena ships with the right bits set, but belt-and-braces in case
+# the same tarball-strip happens.
+RUN chmod +x /opt/jena/bin/*
 
 ENV PATH="/opt/jena/bin:/opt/tarql/bin:${PATH}"
 ENV JENA_HOME=/opt/jena
