@@ -4,8 +4,7 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 dbr:North_by_Northwest rdf:type dbo:Work ;
-     dbo:abstract "North by Northwest is a 1959 American spy thriller film
-     produced and directed by Alfred Hitchcock, starring Cary Grant."@en ,
+     dbo:abstract "North by Northwest is a 1959 American spy thriller film produced and directed by Alfred Hitchcock, starring Cary Grant."@en ,
 		"Der unsichtbare Dritte (Originaltitel North by Northwest) ist ein US-amerikanischer Thriller, der 1959 von Alfred Hitchcock nach einem Drehbuch von Ernest Lehman gedreht wurde."@de .
 
 dbr:North_by_Northwest rdf:type dbo:Work ;
