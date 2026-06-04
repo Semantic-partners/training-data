@@ -1,9 +1,11 @@
 {
   "name": "KG Course",
-  "build": { "dockerfile": "Dockerfile" },
-  "forwardPorts": [3030],
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/training-data",
+  "forwardPorts": [7200],
   "portsAttributes": {
-    "3030": { "label": "Fuseki", "onAutoForward": "silent" }
+    "7200": { "label": "GraphDB Workbench", "onAutoForward": "silent" }
   },
   "postCreateCommand": "bash .devcontainer/postCreate.sh",
   "customizations": {

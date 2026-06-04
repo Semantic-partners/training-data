@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/training-data:cached
+    command: sleep infinity
+    networks:
+      - kgnet
+
+  graphdb:
+    image: ontotext/graphdb:11.0.1
+    restart: unless-stopped
+    ports:
+      - "7200:7200"
+    volumes:
+      - graphdb-data:/opt/graphdb/home
+    networks:
+      - kgnet
+
+networks:
+  kgnet:
+
+volumes:
+  graphdb-data:
