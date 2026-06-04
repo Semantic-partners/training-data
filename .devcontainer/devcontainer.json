@@ -14,7 +14,20 @@
         "faubulous.mentor"
       ],
       "settings": {
-        "mentor.shacl.enabled": true
+        "mentor.shacl.enabled": true,
+        "mentor.inference.enabled": true,
+        "mentor.sparql.defaultInferenceEnabled": true,
+        "mentor.sparql.connections": [
+          {
+            "id": "graphdb-local",
+            "description": "Local GraphDB (devcontainer)",
+            "endpointUrl": "http://graphdb:7200/repositories/training",
+            "configScope": "workspace",
+            "storeType": "graphdb",
+            "inferenceEnabled": true,
+            "inferenceSupported": true
+          }
+        ]
       }
     }
   }
