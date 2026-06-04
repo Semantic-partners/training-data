@@ -5,8 +5,11 @@ ARG JENA_VERSION=6.1.0
 ARG FUSEKI_VERSION=6.1.0
 ARG TARQL_VERSION=1.2
 
-# Java runtime (needed by Jena, Fuseki, TARQL) + curl for downloads
-RUN apt-get update \
+# Java runtime (needed by Jena, Fuseki, TARQL) + curl for downloads.
+# Drop the Yarn apt source from the base image — its signing key has expired
+# and breaks apt-get update. We don't need Yarn here.
+RUN rm -f /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         default-jre-headless \
         ca-certificates \
