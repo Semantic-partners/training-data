@@ -1,6 +1,11 @@
 {
   "name": "KG Course",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "build": { "dockerfile": "Dockerfile" },
+  "forwardPorts": [3030],
+  "portsAttributes": {
+    "3030": { "label": "Fuseki", "onAutoForward": "silent" }
+  },
+  "postCreateCommand": "bash .devcontainer/postCreate.sh",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -10,6 +15,5 @@
         "mentor.shacl.enabled": true
       }
     }
-  },
-  "postCreateCommand": "pip install rdflib pyshacl"
+  }
 }
