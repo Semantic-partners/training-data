@@ -5,15 +5,20 @@ ARG JENA_VERSION=6.1.0
 ARG TARQL_VERSION=1.2
 
 # Java runtime (needed by Jena CLI + TARQL) + curl for downloads.
+# Jena 6.x targets Java 21 — bookworm's default JRE is 17, so we pull
+# openjdk-21-jre-headless from bookworm-backports.
 # Drop the Yarn apt source from the base image — its signing key has expired
 # and breaks apt-get update. We don't need Yarn here.
 RUN rm -f /etc/apt/sources.list.d/yarn.list \
+    && echo "deb http://deb.debian.org/debian bookworm-backports main" \
+        > /etc/apt/sources.list.d/backports.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        default-jre-headless \
         ca-certificates \
         curl \
         unzip \
+    && apt-get install -y --no-install-recommends -t bookworm-backports \
+        openjdk-21-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
 # Apache Jena CLI (riot, sparql, shacl, arq, ...). No Fuseki here —
