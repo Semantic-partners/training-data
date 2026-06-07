@@ -3,23 +3,27 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bookworm
 # Pin tool versions for reproducibility — bump deliberately when needed.
 ARG JENA_VERSION=6.1.0
 ARG TARQL_VERSION=1.2
+ARG TEMURIN_VERSION=21.0.5+11
 
-# Java runtime (needed by Jena CLI + TARQL) + curl for downloads.
-# Jena 6.x targets Java 21 — bookworm's default JRE is 17, so we pull
-# openjdk-21-jre-headless from bookworm-backports.
-# Drop the Yarn apt source from the base image — its signing key has expired
-# and breaks apt-get update. We don't need Yarn here.
+# Base OS deps. Drop the Yarn apt source from the base image — its signing
+# key has expired and breaks apt-get update. We don't need Yarn here.
 RUN rm -f /etc/apt/sources.list.d/yarn.list \
-    && echo "deb http://deb.debian.org/debian bookworm-backports main" \
-        > /etc/apt/sources.list.d/backports.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
         unzip \
-    && apt-get install -y --no-install-recommends -t bookworm-backports \
-        openjdk-21-jre-headless \
     && rm -rf /var/lib/apt/lists/*
+
+# Java 21 runtime (Jena 6.x is compiled for Java 21; bookworm only ships 17,
+# and bookworm-backports no longer carries openjdk-21). Pull Temurin direct.
+RUN curl -fsSL "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jre_x64_linux_hotspot_21.0.5_11.tar.gz" \
+        -o /tmp/jre.tar.gz \
+    && tar -xzf /tmp/jre.tar.gz -C /opt \
+    && mv "/opt/jdk-21.0.5+11-jre" /opt/jre \
+    && rm /tmp/jre.tar.gz
+ENV JAVA_HOME=/opt/jre
+ENV PATH="/opt/jre/bin:${PATH}"
 
 # Apache Jena CLI (riot, sparql, shacl, arq, ...). No Fuseki here —
 # GraphDB runs as a sibling service via docker-compose.
