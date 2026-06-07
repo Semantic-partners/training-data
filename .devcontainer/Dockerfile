@@ -17,7 +17,14 @@ RUN rm -f /etc/apt/sources.list.d/yarn.list \
 
 # Java 21 runtime (Jena 6.x is compiled for Java 21; bookworm only ships 17,
 # and bookworm-backports no longer carries openjdk-21). Pull Temurin direct.
-RUN curl -fsSL "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jre_x64_linux_hotspot_21.0.5_11.tar.gz" \
+# TARGETARCH is set by BuildKit — amd64 on Codespaces, arm64 on Apple Silicon.
+ARG TARGETARCH
+RUN case "$TARGETARCH" in \
+        amd64) JRE_ARCH=x64 ;; \
+        arm64) JRE_ARCH=aarch64 ;; \
+        *) echo "unsupported TARGETARCH: $TARGETARCH" >&2; exit 1 ;; \
+    esac \
+    && curl -fsSL "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jre_${JRE_ARCH}_linux_hotspot_21.0.5_11.tar.gz" \
         -o /tmp/jre.tar.gz \
     && tar -xzf /tmp/jre.tar.gz -C /opt \
     && mv "/opt/jdk-21.0.5+11-jre" /opt/jre \

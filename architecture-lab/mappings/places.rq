@@ -7,8 +7,9 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 # Each row produces one ex:place/<name> with its type (geo:Town/Country/Continent).
 # Non-top-level rows additionally get a geo:isLocatedIn link to their parent.
 # Top-level regions (continents in this dataset) have an empty `located_in`
-# column — the OPTIONAL leaves ?parentIri unbound, and CONSTRUCT skips the
-# geo:isLocatedIn triple for those rows while still emitting type + label.
+# column — IF's false branch references an unbound variable, so ?parentIri
+# stays unbound and CONSTRUCT skips the geo:isLocatedIn triple for those
+# rows while still emitting type + label.
 
 CONSTRUCT {
   ?placeIri a ?kindIri ;
@@ -18,8 +19,7 @@ CONSTRUCT {
 WHERE {
   BIND(IRI(CONCAT("http://example.org/place/", REPLACE(?place, " ", "_"))) AS ?placeIri)
   BIND(IRI(CONCAT("http://geo.org/", ?kind)) AS ?kindIri)
-  OPTIONAL {
-    FILTER(?located_in != "")
-    BIND(IRI(CONCAT("http://example.org/place/", REPLACE(?located_in, " ", "_"))) AS ?parentIri)
-  }
+  BIND(IF(?located_in != "",
+          IRI(CONCAT("http://example.org/place/", REPLACE(?located_in, " ", "_"))),
+          ?noParent) AS ?parentIri)
 }
