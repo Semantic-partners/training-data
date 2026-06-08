@@ -1,3 +1,8 @@
+prefix ex: <http://example.org/>
+prefix pizza: <http://www.co-ode.org/ontologies/pizza/pizza.owl#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix sh: <http://www.w3.org/ns/shacl#>
+
 
 pizza:SpicyPizza a rdfs:Class, sh:NodeShape ;
   rdfs:subClassOf pizza:Pizza ;
