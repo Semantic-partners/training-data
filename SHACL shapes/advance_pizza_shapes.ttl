@@ -1,0 +1,12 @@
+
+pizza:SpicyPizza a rdfs:Class, sh:NodeShape ;
+  rdfs:subClassOf pizza:Pizza ;
+  sh:sparql pizza:SpicyPizzaConstraint .
+
+
+pizza:SpicyPizzaConstraint a sh:SPARQLConstraint ;
+  sh:message "Spicy Pizza should have at least 1 Hot Topping" ;
+  sh:prefixes pizza: ;
+  sh:select """
+   xxxx
+  """ .
