@@ -1,0 +1,13 @@
+pizza:SpicyPizza a rdfs:Class, sh:NodeShape ;
+  rdfs:subClassOf pizza:Pizza ;
+  sh:sparql pizza:SpicyPizzaConstraint .
+
+ex:PepperoniPizza a pizza:SpicyPizza ;
+  pizza:hasTopping ex:TomatoSauce, ex:Mozzarella, ex:Pepperoni, ex:Onions ;
+  pizza:hasBase ex:Thin .
+ex:Pepperoni a pizza:Topping ;
+  pizza:hasSpiciness pizza:Hot ;
+  pizza:calories 50 .
+ex:Onions a pizza:Topping ;
+  pizza:hasSpiciness pizza:Mild ;
+  pizza:calories 40 .
