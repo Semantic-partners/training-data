@@ -1,12 +1,11 @@
 @prefix dbo:	<http://dbpedia.org/ontology/> .
 @prefix dbr:	<http://dbpedia.org/resource/> .
-@prefix ex:	<http://example.com/ns#> .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
 
-ex:HitchcockFilm rdfs:subClassOf dbo:Film .
+dbo:HitchcockFilm rdfs:subClassOf dbo:Film .
 
-dbr:Vertigo a ex:HitchcockFilm ;
+dbr:Vertigo a dbo:HitchcockFilm ;
     dbo:director dbr:Alfred_Hitchcock .
 
-dbr:Jaws a ex:HitchcockFilm ;
+dbr:Jaws a dbo:HitchcockFilm ;
     dbo:director dbr:Steven_Spielberg .

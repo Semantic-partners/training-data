@@ -8,4 +8,5 @@ sp:PropertyExampleShape
 	a sh:PropertyShape ;
 	sh:targetClass dbo:Person ;
 	sh:path rdfs:label ;
+	sh:message "Person must have at least one label" ;
 	sh:minCount 1 .
