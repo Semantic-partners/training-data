@@ -1,0 +1,9 @@
+# Materialise the transitive closure of geo:isLocatedIn.
+# geo:isLocatedIn is declared owl:TransitiveProperty in the ontology; a
+# forward-chaining reasoner would assert every (a → c) where a chain exists.
+# This CONSTRUCT does the same with a property path, so the `training-inferred`
+# dataset can be queried with PLAIN geo:isLocatedIn (no `+`).
+PREFIX geo: <http://geo.org/>
+
+CONSTRUCT { ?a geo:isLocatedIn ?c }
+WHERE     { ?a geo:isLocatedIn+ ?c }

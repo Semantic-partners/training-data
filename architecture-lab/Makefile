@@ -13,21 +13,24 @@
 # Targets:
 #   make all       — build the graph and run the cross-domain query
 #   make validate  — run SHACL against the graph
-#   make query     — list people born in Europe
+#   make query     — list people born in Europe (property-path form)
 #   make places    — list places by continent
-#   make load      — load build/graph.ttl into the local GraphDB `training` repo
+#   make infer     — materialise the transitive closure (build/graph-inferred.ttl)
+#   make load      — load both graphs into Fuseki (/training and /training-inferred)
+#   make reveal    — the reasoning reveal: plain geo:isLocatedIn, with vs without closure
 #   make clean     — wipe build/
 
 BUILD := build
-GRAPHDB_URL ?= http://graphdb:7200
-REPO ?= training
+FUSEKI_URL ?= http://fuseki:3030
 
-PEOPLE_TTL  := $(BUILD)/people.ttl
-PLACES_TTL  := $(BUILD)/places.ttl
-GRAPH_TTL   := $(BUILD)/graph.ttl
-REPORT_TTL  := $(BUILD)/shacl-report.ttl
+PEOPLE_TTL   := $(BUILD)/people.ttl
+PLACES_TTL   := $(BUILD)/places.ttl
+GRAPH_TTL    := $(BUILD)/graph.ttl
+INFERRED_TTL := $(BUILD)/graph-inferred.ttl
+CLOSURE_TTL  := $(BUILD)/closure.ttl
+REPORT_TTL   := $(BUILD)/shacl-report.ttl
 
-.PHONY: all validate query places load clean
+.PHONY: all validate query places infer load reveal clean
 
 all: query
 
@@ -62,16 +65,47 @@ places: $(GRAPH_TTL)
 	@echo "== Places by continent =="
 	arq --data $(GRAPH_TTL) --query queries/places-in-continent.rq
 
-# --- Layer 5: load into GraphDB so the reasoner can do its job ---
+# --- Layer 5: materialise the reasoning ---
+#
+# geo:isLocatedIn is owl:TransitiveProperty. A forward-chaining reasoner would
+# assert every (a → c) reachable through the chain. We do exactly that with an
+# arq property-path CONSTRUCT, then merge it back — so the inferred graph can be
+# queried with PLAIN geo:isLocatedIn (no `+`). This is "the reasoner" made
+# explicit and inspectable.
 
-load: $(GRAPH_TTL)
-	curl -X POST \
-	     -H "Content-Type: text/turtle" \
-	     --data-binary "@$(GRAPH_TTL)" \
-	     "$(GRAPHDB_URL)/repositories/$(REPO)/statements"
+infer: $(INFERRED_TTL)
+
+$(INFERRED_TTL): $(GRAPH_TTL) queries/infer-locatedin.rq | $(BUILD)
+	arq --data $(GRAPH_TTL) --query queries/infer-locatedin.rq > $(CLOSURE_TTL)
+	riot --formatted=ttl $(GRAPH_TTL) $(CLOSURE_TTL) > $@
+
+# --- Layer 6: load both graphs into Fuseki ---
+#   /training           — asserted only (query with geo:isLocatedIn+)
+#   /training-inferred  — asserted + materialised closure (plain geo:isLocatedIn works)
+
+load: $(GRAPH_TTL) $(INFERRED_TTL)
+	curl -X POST -H "Content-Type: text/turtle" --data-binary "@$(GRAPH_TTL)" \
+	     "$(FUSEKI_URL)/training/data"
+	curl -X POST -H "Content-Type: text/turtle" --data-binary "@$(INFERRED_TTL)" \
+	     "$(FUSEKI_URL)/training-inferred/data"
 	@echo
-	@echo "Loaded into $(GRAPHDB_URL)/repositories/$(REPO)"
-	@echo "Try the workbench (forwarded port 7200) — and toggle 'Include inferred' on/off."
+	@echo "Loaded /training (asserted) and /training-inferred (+ closure)."
+	@echo "Fuseki UI: forwarded port 3030. Then: make reveal"
+
+# --- The reasoning reveal: same plain query, with vs without the closure ---
+
+reveal: load
+	@echo "== Plain geo:isLocatedIn — WITHOUT reasoning (/training): expect nothing =="
+	@curl -s -H "Accept: text/csv" \
+	      --data-urlencode "query@queries/people-born-in-europe-plain.rq" \
+	      "$(FUSEKI_URL)/training/sparql"
+	@echo
+	@echo "== Plain geo:isLocatedIn — WITH the materialised closure (/training-inferred) =="
+	@curl -s -H "Accept: text/csv" \
+	      --data-urlencode "query@queries/people-born-in-europe-plain.rq" \
+	      "$(FUSEKI_URL)/training-inferred/sparql"
+	@echo
+	@echo "Same query. The closure is the difference — that's what a reasoner buys you."
 
 clean:
 	rm -rf $(BUILD)

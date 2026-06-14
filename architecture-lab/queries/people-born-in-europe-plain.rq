@@ -1,0 +1,21 @@
+# People born in Europe — the WITH-REASONING form.
+#
+# Identical to people-born-in-europe.rq except it uses PLAIN geo:isLocatedIn
+# (no `+`). It only returns results when the transitive closure has been
+# materialised — i.e. against the `training-inferred` dataset. Run it against
+# plain `training` and you get nothing; that's the reveal.
+PREFIX bio:    <http://example.org/bio/>
+PREFIX family: <http://family.org/>
+PREFIX geo:    <http://geo.org/>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?personLabel ?townLabel
+WHERE {
+    ?person a family:Person ;
+            rdfs:label ?personLabel ;
+            bio:wasBornIn ?town .
+    ?town rdfs:label ?townLabel ;
+          geo:isLocatedIn ?europe .
+    ?europe rdfs:label "Europe" .
+}
+ORDER BY ?personLabel
