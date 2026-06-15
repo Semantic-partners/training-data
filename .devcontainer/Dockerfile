@@ -34,7 +34,9 @@ ENV PATH="/opt/jre/bin:${PATH}"
 
 # Apache Jena CLI (riot, sparql, shacl, arq, ...). The triplestore (Fuseki)
 # runs as a sibling service via docker-compose.
-RUN curl -fsSL "https://dlcdn.apache.org/jena/binaries/apache-jena-${JENA_VERSION}.tar.gz" \
+# Pull from archive.apache.org (permanent) not dlcdn (latest-only) — dlcdn 404s
+# a pinned version the moment a newer Jena ships, which would break the build.
+RUN curl -fsSL "https://archive.apache.org/dist/jena/binaries/apache-jena-${JENA_VERSION}.tar.gz" \
         -o /tmp/jena.tar.gz \
     && tar -xzf /tmp/jena.tar.gz -C /opt \
     && mv "/opt/apache-jena-${JENA_VERSION}" /opt/jena \
@@ -59,9 +61,9 @@ ENV JENA_HOME=/opt/jena
 # Fuseki endpoint reachable from this container via the compose network
 ENV FUSEKI_URL=http://fuseki:3030
 
-# Python SHACL + mapping + testing tooling
+# Python SHACL + testing tooling. (CSV→RDF is done with TARQL in the labs, so
+# morph-kgc isn't installed — it pulls heavy deps and nothing here uses it.)
 RUN pip install --no-cache-dir \
         rdflib \
         pyshacl \
-        morph-kgc \
         mustrd

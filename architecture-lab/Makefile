@@ -85,9 +85,9 @@ $(INFERRED_TTL): $(GRAPH_TTL) queries/infer-locatedin.rq | $(BUILD)
 
 load: $(GRAPH_TTL) $(INFERRED_TTL)
 	curl -X POST -H "Content-Type: text/turtle" --data-binary "@$(GRAPH_TTL)" \
-	     "$(FUSEKI_URL)/training/data"
+	     "$(FUSEKI_URL)/training/data?default"
 	curl -X POST -H "Content-Type: text/turtle" --data-binary "@$(INFERRED_TTL)" \
-	     "$(FUSEKI_URL)/training-inferred/data"
+	     "$(FUSEKI_URL)/training-inferred/data?default"
 	@echo
 	@echo "Loaded /training (asserted) and /training-inferred (+ closure)."
 	@echo "Fuseki UI: forwarded port 3030. Then: make reveal"
