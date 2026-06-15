@@ -3,9 +3,9 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspaces/training-data",
-  "forwardPorts": [7200],
+  "forwardPorts": [3030],
   "portsAttributes": {
-    "7200": { "label": "GraphDB Workbench", "onAutoForward": "silent" }
+    "3030": { "label": "Fuseki", "onAutoForward": "silent" }
   },
   "postCreateCommand": "bash .devcontainer/postCreate.sh",
   "customizations": {
@@ -15,17 +15,20 @@
       ],
       "settings": {
         "mentor.shacl.enabled": true,
-        "mentor.inference.enabled": true,
-        "mentor.sparql.defaultInferenceEnabled": true,
         "mentor.sparql.connections": [
           {
-            "id": "graphdb-local",
-            "description": "Local GraphDB (devcontainer)",
-            "endpointUrl": "http://graphdb:7200/repositories/training",
+            "id": "fuseki-training",
+            "description": "Fuseki — training (asserted)",
+            "endpointUrl": "http://fuseki:3030/training/sparql",
             "configScope": "workspace",
-            "storeType": "graphdb",
-            "inferenceEnabled": true,
-            "inferenceSupported": true
+            "storeType": "fuseki"
+          },
+          {
+            "id": "fuseki-training-inferred",
+            "description": "Fuseki — training-inferred (asserted + materialised closure)",
+            "endpointUrl": "http://fuseki:3030/training-inferred/sparql",
+            "configScope": "workspace",
+            "storeType": "fuseki"
           }
         ]
       }

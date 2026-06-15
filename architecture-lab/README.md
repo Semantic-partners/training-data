@@ -14,7 +14,7 @@ a file you can inspect, and the whole thing reruns with `make all`.
 2. **Merge** the raw triples with the **ontology** into one graph.
 3. **Validate** with **SHACL** (pyshacl).
 4. **Query** with **SPARQL** — cross-domain, transitive, the works.
-5. Optionally **load into GraphDB** and watch the reasoner materialise the transitive closure of `geo:isLocatedIn`.
+5. **Load into Fuseki** and *reveal the reasoning*: the same plain query returns nothing against the asserted graph, but the full transitive closure of `geo:isLocatedIn` against `/training-inferred`.
 
 ## Files
 
@@ -32,7 +32,9 @@ architecture-lab/
 │   ├── people.ttl
 │   └── places.ttl
 ├── queries/                      SPARQL questions
-│   ├── people-born-in-europe.rq
+│   ├── people-born-in-europe.rq        property-path form (geo:isLocatedIn+)
+│   ├── people-born-in-europe-plain.rq  plain form — needs the materialised closure
+│   ├── infer-locatedin.rq              materialises the transitive closure
 │   └── places-in-continent.rq
 ├── Makefile                      pipeline glue
 └── README.md
@@ -46,7 +48,9 @@ Inside the devcontainer (Codespace or local). From this directory:
 make all          # ingest both CSVs, merge with ontology, run the cross-domain query
 make validate     # run pyshacl against the merged graph
 make places       # query the geographic side only
-make load         # POST the graph to the local GraphDB `training` repo
+make infer        # materialise the transitive closure (build/graph-inferred.ttl)
+make load         # load /training (asserted) and /training-inferred (+ closure) into Fuseki
+make reveal       # the reasoning reveal — same plain query, with vs without the closure
 make clean        # wipe build/
 ```
 
@@ -58,17 +62,25 @@ their birth town, up the transitive `geo:isLocatedIn` chain, to a country
 or continent. That is the whole point — knowledge graphs become useful
 when domains link.
 
-## Reasoning
+## Reasoning — the reveal
 
-`geo:isLocatedIn` is declared `owl:TransitiveProperty` in the ontology.
+`geo:isLocatedIn` is declared `owl:TransitiveProperty` in the ontology. There
+are two ways to get the transitive closure (London → UK → Europe):
 
-- Locally (with `arq` / pyshacl): the queries use `geo:isLocatedIn+`
-  (a SPARQL property path) to compute the closure on the fly.
-- In GraphDB: the `training` repo runs with `rdfsplus-optimized` ruleset,
-  which materialises the transitive closure. Queries use plain
-  `geo:isLocatedIn` and get the same answer.
+- **Property path** — query with `geo:isLocatedIn+`. Works on the asserted
+  graph, no reasoner. That's `people-born-in-europe.rq`.
+- **Materialised closure** — assert every reachable `(a → c)` up front, then
+  query with plain `geo:isLocatedIn`. `make infer` builds the closure with an
+  `arq` CONSTRUCT (`infer-locatedin.rq`) — exactly what a forward-chaining
+  reasoner does, made explicit — and `make load` puts it in `/training-inferred`.
 
-The lab shows both routes so trainees can compare.
+`make reveal` runs the *same plain query* (`people-born-in-europe-plain.rq`)
+against both Fuseki datasets: nothing from `/training`, the full answer from
+`/training-inferred`. That gap is what a reasoner buys you.
+
+(We materialise the closure rather than run a live reasoner: it's reliable,
+transparent — `build/closure.ttl` is the inferred triples, right there to
+inspect — and free of Jena's InfModel-over-a-mutated-store quirks.)
 
 ## What's deliberately missing
 

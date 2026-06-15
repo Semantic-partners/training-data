@@ -9,18 +9,21 @@ services:
     networks:
       - kgnet
 
-  graphdb:
-    image: ontotext/graphdb:11.0.1
+  # Apache Jena Fuseki — free, no licence (unlike GraphDB 11, which now requires
+  # one even for its free tier). A mounted config serves two services over one
+  # store: /training (plain) and /training-inferred (OWLMicro reasoner).
+  fuseki:
+    image: stain/jena-fuseki:latest
     restart: unless-stopped
     ports:
-      - "7200:7200"
+      - "3030:3030"
+    environment:
+      - FUSEKI_BASE=/fuseki
     volumes:
-      - graphdb-data:/opt/graphdb/home
+      - ./fuseki/config.ttl:/fuseki/config.ttl:ro
+      - ./fuseki/shiro.ini:/fuseki/shiro.ini:ro
     networks:
       - kgnet
 
 networks:
   kgnet:
-
-volumes:
-  graphdb-data:

@@ -32,8 +32,8 @@ RUN case "$TARGETARCH" in \
 ENV JAVA_HOME=/opt/jre
 ENV PATH="/opt/jre/bin:${PATH}"
 
-# Apache Jena CLI (riot, sparql, shacl, arq, ...). No Fuseki here —
-# GraphDB runs as a sibling service via docker-compose.
+# Apache Jena CLI (riot, sparql, shacl, arq, ...). The triplestore (Fuseki)
+# runs as a sibling service via docker-compose.
 RUN curl -fsSL "https://dlcdn.apache.org/jena/binaries/apache-jena-${JENA_VERSION}.tar.gz" \
         -o /tmp/jena.tar.gz \
     && tar -xzf /tmp/jena.tar.gz -C /opt \
@@ -56,8 +56,8 @@ RUN chmod +x /opt/jena/bin/*
 ENV PATH="/opt/jena/bin:/opt/tarql/bin:${PATH}"
 ENV JENA_HOME=/opt/jena
 
-# GraphDB endpoint reachable from this container via the compose network
-ENV GRAPHDB_URL=http://graphdb:7200
+# Fuseki endpoint reachable from this container via the compose network
+ENV FUSEKI_URL=http://fuseki:3030
 
 # Python SHACL + mapping + testing tooling
 RUN pip install --no-cache-dir \
