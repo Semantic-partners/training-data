@@ -10,10 +10,12 @@ services:
       - kgnet
 
   # Apache Jena Fuseki — free, no licence (unlike GraphDB 11, which now requires
-  # one even for its free tier). A mounted config serves two services over one
-  # store: /training (plain) and /training-inferred (OWLMicro reasoner).
+  # one even for its free tier). A mounted config serves two in-memory datasets:
+  # /training (asserted) and /training-inferred (asserted + a materialised
+  # transitive closure built offline by `make` — no live reasoner).
+  # Pinned, not :latest, so every cohort gets the version we tested.
   fuseki:
-    image: stain/jena-fuseki:latest
+    image: stain/jena-fuseki:5.1.0
     restart: unless-stopped
     ports:
       - "3030:3030"
