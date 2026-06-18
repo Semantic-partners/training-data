@@ -30,7 +30,8 @@ INFERRED_TTL := $(BUILD)/graph-inferred.ttl
 CLOSURE_TTL  := $(BUILD)/closure.ttl
 REPORT_TTL   := $(BUILD)/shacl-report.ttl
 
-.PHONY: all validate query places infer load reveal clean
+.PHONY: all validate query places infer load reveal clean \
+        people-tarql people-rdflib cookbook
 
 all: query
 
@@ -106,6 +107,35 @@ reveal: load
 	      "$(FUSEKI_URL)/training-inferred/sparql"
 	@echo
 	@echo "Same query. The closure is the difference — that's what a reasoner buys you."
+
+# --- A mapping cookbook: the same people.csv → the same triples, several ways ---
+#
+# Not "the" way to map — a palette. Each recipe is standalone; reach for the one
+# that fits your context. `make cookbook` proves they all emit identical triples
+# (canonical sorted N-Triples — our data has no blank nodes, so this is exact).
+
+people-tarql: $(BUILD)/people-tarql.ttl    ## SPARQL CONSTRUCT over CSV
+$(BUILD)/people-tarql.ttl: mappings/people.rq csv/people.csv | $(BUILD)
+	tarql mappings/people.rq csv/people.csv > $@
+
+people-rdflib: $(BUILD)/people-rdflib.ttl  ## plain Python, when code is what you have
+$(BUILD)/people-rdflib.ttl: mappings/people_rdflib.py csv/people.csv | $(BUILD)
+	python3 mappings/people_rdflib.py csv/people.csv > $@
+
+# Canonical form for comparison: sorted N-Triples.
+$(BUILD)/%.nt: $(BUILD)/%.ttl
+	riot --output=nt $< | LC_ALL=C sort > $@
+
+COOKBOOK_NT := $(BUILD)/people-tarql.nt $(BUILD)/people-rdflib.nt
+
+cookbook: $(COOKBOOK_NT)
+	@echo "Comparing every recipe against TARQL (canonical sorted N-Triples)…"
+	@for r in $(filter-out %people-tarql.nt,$(COOKBOOK_NT)); do \
+	  if diff -q $(BUILD)/people-tarql.nt $$r >/dev/null; then \
+	    echo "  OK  $$r — identical to TARQL"; \
+	  else echo "  XX  $$r — DIFFERS:"; diff $(BUILD)/people-tarql.nt $$r; exit 1; fi; \
+	done
+	@echo "Same triples, different tools. Pick the one that fits — none is 'correct'."
 
 clean:
 	rm -rf $(BUILD)
