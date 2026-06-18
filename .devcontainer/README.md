@@ -65,3 +65,44 @@ pinned in `docker-compose.yml`; the datasets live in `fuseki/config.ttl` and
 auth is wide-open via `fuseki/shiro.ini` (local throwaway container only).
 `postCreate.sh` runs once per container build to print a tool sanity check and
 wait for Fuseki.
+
+## Running a cohort in Codespaces (trainer / org-owner setup)
+
+Trainees do **not** need personal Codespaces hours. The org pays, capped — and
+each trainee creates the Codespace on **this org repo**, not a fork. (A fork in a
+personal account bills that person, and personal accounts can be blocked for any
+of several reasons — exhausted free tier, $0 budget, no card on file, or a
+managed/EMU account with no free allowance. Don't rely on it for a delivery.)
+
+**Before the course — org owner, once:**
+
+1. **Org → Settings → Codespaces** — enable Codespaces for the org. Under the
+   access policy, make sure **outside collaborators are allowed** to use it (not
+   just members), and pick the machine type (2- or 4-core is plenty here).
+2. **Org → Settings → Billing** — add a payment method and set a Codespaces
+   **spending limit** (≈ $100 covers a cohort: ~10 people × ~8 h × 4-core ≈
+   $50–60; idle Codespaces auto-stop).
+3. Collect each trainee's **GitHub username**.
+4. **This repo → Settings → Collaborators → Add people** — add each trainee.
+   `training-data` is **public**, so they join as **outside collaborators** and
+   **don't consume paid org seats** — only Codespaces usage is billed. **Read**
+   access is enough to create a Codespace. (Alternatively: make a team in the org
+   and grant it read here.)
+
+**On the day — each trainee:**
+
+1. Open **github.com/Semantic-partners/training-data** (the org repo — *not* a
+   fork).
+2. Green **Code → Codespaces → +** (create on `main`). Billed to Semantic
+   Partners.
+3. `cd architecture-lab && make load && make reveal`.
+
+**After the course:**
+
+- Remove the collaborators, and drop the Codespaces spending limit back to **$0**
+  to stop any further spend.
+
+**No-cloud fallback:** anyone who can run **Docker Desktop** locally can skip
+Codespaces entirely — clone the repo, open in VS Code, "Reopen in Container".
+Same devcontainer, zero GitHub billing. (Often blocked on locked-down corporate
+laptops, hence org-billed Codespaces as the primary path.)
