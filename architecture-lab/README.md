@@ -25,7 +25,12 @@ architecture-lab/
 │   └── places.csv
 ├── mappings/                     CSV → RDF — a cookbook of recipes (see below)
 │   ├── people.rq                 TARQL (SPARQL CONSTRUCT over CSV)
-│   ├── people_rdflib.py          plain Python + rdflib — same triples
+│   ├── people_rdflib.py          plain Python + rdflib
+│   ├── people.yarrrml.yml        YARRRML — the friendly face of RML
+│   ├── people.rml.ttl            RML (executed by rmlmapper)
+│   ├── people.r2rml.ttl          R2RML over SQLite (executed by ontop)
+│   ├── people_to_sqlite.py       loads people.csv into SQLite for R2RML
+│   ├── people.properties         ontop JDBC connection
 │   └── places.rq
 ├── ontology/
 │   └── lab-ontology.ttl          minimal ontology, reuses geo:/family:
@@ -75,7 +80,7 @@ because a slide said so. We're painting a set of possibilities, not a mandate.
 | `make people-tarql`  | TARQL — SPARQL CONSTRUCT over CSV | you already think in SPARQL; quick CSV → RDF | ✓ |
 | `make people-rdflib` | plain Python + rdflib | code is what you have; the logic gets fiddly | ✓ |
 | `make people-rml`    | RML / YARRRML (rmlmapper) | declarative mapping, many sources, an open standard | ✓ |
-| `make people-r2rml`  | R2RML over SQLite | the source is a *database*, not a file (pairs with OBDA) | planned |
+| `make people-r2rml`  | R2RML over SQLite (ontop) | the source is a *database*, not a file (pairs with OBDA) | ✓ |
 
 `make cookbook` runs the recipes and diffs them as canonical N-Triples. It's a
 **heads-up, not a pass/fail** — the differences are the lesson. The sharp one:

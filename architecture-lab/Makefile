@@ -31,7 +31,7 @@ CLOSURE_TTL  := $(BUILD)/closure.ttl
 REPORT_TTL   := $(BUILD)/shacl-report.ttl
 
 .PHONY: all validate query places infer load reveal clean \
-        people-tarql people-rdflib people-rml cookbook
+        people-tarql people-rdflib people-rml people-r2rml cookbook
 
 all: query
 
@@ -136,11 +136,35 @@ people-rml: $(BUILD)/people-rml.ttl  ## RML/YARRRML — declarative; watch the %
 $(BUILD)/people-rml.ttl: mappings/people.rml.ttl csv/people.csv $(RMLMAPPER) | $(BUILD)
 	java -jar $(RMLMAPPER) -m mappings/people.rml.ttl -s turtle -o $@
 
+# R2RML over a SQLite database (ontop). R2RML maps *relational* sources, so first
+# load the CSV into SQLite (stdlib sqlite3). The slug RML needed an FNML function
+# for, SQL does for free in the logical query. ontop CLI + sqlite-jdbc lazy-fetched.
+ONTOP_URL       := https://github.com/ontop/ontop/releases/download/ontop-5.5.0/ontop-cli-5.5.0.zip
+SQLITE_JDBC_URL := https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.53.2.0/sqlite-jdbc-3.53.2.0.jar
+ONTOP           := $(BUILD)/ontop/ontop
+PEOPLE_DB       := $(BUILD)/people.db
+
+$(PEOPLE_DB): mappings/people_to_sqlite.py csv/people.csv | $(BUILD)
+	python3 mappings/people_to_sqlite.py csv/people.csv $@
+
+$(ONTOP): | $(BUILD)
+	@echo "Fetching ontop CLI + sqlite-jdbc (once)…"
+	curl -fsSL "$(ONTOP_URL)" -o $(BUILD)/ontop.zip
+	rm -rf $(BUILD)/ontop && mkdir -p $(BUILD)/ontop
+	unzip -oq $(BUILD)/ontop.zip -d $(BUILD)/ontop
+	curl -fsSL "$(SQLITE_JDBC_URL)" -o $(BUILD)/ontop/jdbc/sqlite-jdbc.jar
+	chmod +x $(ONTOP)
+
+people-r2rml: $(BUILD)/people-r2rml.ttl  ## R2RML over SQLite — SQL slugs cleanly
+$(BUILD)/people-r2rml.ttl: mappings/people.r2rml.ttl mappings/people.properties $(PEOPLE_DB) $(ONTOP) | $(BUILD)
+	$(ONTOP) materialize -m mappings/people.r2rml.ttl -p mappings/people.properties -f turtle -o $@
+
 # Canonical form for comparison: sorted N-Triples.
 $(BUILD)/%.nt: $(BUILD)/%.ttl
 	riot --output=nt $< | LC_ALL=C sort > $@
 
-COOKBOOK_NT := $(BUILD)/people-tarql.nt $(BUILD)/people-rdflib.nt $(BUILD)/people-rml.nt
+COOKBOOK_NT := $(BUILD)/people-tarql.nt $(BUILD)/people-rdflib.nt \
+               $(BUILD)/people-rml.nt $(BUILD)/people-r2rml.nt
 
 cookbook: $(COOKBOOK_NT)
 	@echo "Comparing every recipe against TARQL (canonical sorted N-Triples)…"
