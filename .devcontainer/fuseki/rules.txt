@@ -1,0 +1,13 @@
+# Jena rule: geo:isLocatedIn is transitive.
+#
+# Used by the /training-reasoned dataset (config.ttl) — the LIVE-reasoner recipe.
+# This is the forward-chaining reasoner made explicit: the same closure
+# `make infer` materialises offline, here derived live by the engine. (Full URIs,
+# not prefixes, so the rule needs no @prefix wiring.)
+
+[transLocatedIn:
+    (?a <http://geo.org/isLocatedIn> ?b)
+    (?b <http://geo.org/isLocatedIn> ?c)
+    ->
+    (?a <http://geo.org/isLocatedIn> ?c)
+]

@@ -1,13 +1,16 @@
-# Fuseki configuration — two plain in-memory datasets:
-#   /training           — the asserted graph (query with property paths, e.g. geo:isLocatedIn+)
-#   /training-inferred  — the asserted graph PLUS the materialised transitive
-#                         closure of geo:isLocatedIn, so plain geo:isLocatedIn works.
+# Fuseki configuration — three in-memory datasets, one per reasoning recipe.
+# Same question (transitive closure of geo:isLocatedIn), three honest answers:
+#   /training           — asserted only. Query with a property path (geo:isLocatedIn+).
+#   /training-inferred  — asserted + the closure MATERIALISED offline by `make`
+#                         (an arq CONSTRUCT). Plain geo:isLocatedIn works because
+#                         the inferred triples are physically present — and you can
+#                         open build/closure.ttl and read exactly what was added.
+#   /training-reasoned  — asserted only, behind a LIVE Jena reasoner
+#                         (GenericRuleReasoner + fuseki/rules.txt). Plain
+#                         geo:isLocatedIn works because the engine derives the
+#                         closure itself, on load — no offline step.
 #
-# The closure is materialised offline by `make` (an arq CONSTRUCT — exactly what
-# a forward-chaining reasoner does), then loaded here. We keep two *plain*
-# datasets rather than a live InfModel: it's reliable, transparent ("here are
-# the inferred triples"), and sidesteps Jena's InfModel-over-mutated-store
-# quirks. In-memory on purpose — the lab reloads each session via `make load`.
+# In-memory on purpose — the lab reloads each session via `make load`.
 
 @prefix :        <#> .
 @prefix fuseki:  <http://jena.apache.org/fuseki#> .
@@ -25,3 +28,23 @@
     fuseki:endpoint [ fuseki:operation fuseki:query  ; fuseki:name "sparql" ] ;
     fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ; fuseki:name "data" ] ;
     fuseki:dataset [ a ja:RDFDataset ; ja:defaultGraph [ a ja:MemoryModel ] ] .
+
+# Live-reasoner recipe: same asserted data, behind a GenericRuleReasoner that
+# derives the geo:isLocatedIn closure itself (rules.txt). No offline materialise.
+:trainingReasonedService a fuseki:Service ;
+    fuseki:name "training-reasoned" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query  ; fuseki:name "sparql" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ; fuseki:name "data" ] ;
+    fuseki:dataset :reasonedDataset .
+
+:reasonedDataset a ja:RDFDataset ;
+    ja:defaultGraph :reasonedModel .
+
+:reasonedModel a ja:InfModel ;
+    ja:baseModel :reasonedBase ;
+    ja:reasoner [
+        ja:reasonerURL <http://jena.hpl.hp.com/2003/GenericRuleReasoner> ;
+        ja:rulesFrom <file:///fuseki/rules.txt>
+    ] .
+
+:reasonedBase a ja:MemoryModel .

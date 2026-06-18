@@ -79,20 +79,26 @@ $(INFERRED_TTL): $(GRAPH_TTL) queries/infer-locatedin.rq | $(BUILD)
 	arq --data $(GRAPH_TTL) --query queries/infer-locatedin.rq > $(CLOSURE_TTL)
 	riot --formatted=ttl $(GRAPH_TTL) $(CLOSURE_TTL) > $@
 
-# --- Layer 6: load both graphs into Fuseki ---
+# --- Layer 6: load the graphs into Fuseki (one per reasoning recipe) ---
 #   /training           — asserted only (query with geo:isLocatedIn+)
 #   /training-inferred  — asserted + materialised closure (plain geo:isLocatedIn works)
+#   /training-reasoned  — asserted only; the live reasoner derives the closure itself
 
 load: $(GRAPH_TTL) $(INFERRED_TTL)
 	curl -X POST -H "Content-Type: text/turtle" --data-binary "@$(GRAPH_TTL)" \
 	     "$(FUSEKI_URL)/training/data?default"
 	curl -X POST -H "Content-Type: text/turtle" --data-binary "@$(INFERRED_TTL)" \
 	     "$(FUSEKI_URL)/training-inferred/data?default"
+	curl -X POST -H "Content-Type: text/turtle" --data-binary "@$(GRAPH_TTL)" \
+	     "$(FUSEKI_URL)/training-reasoned/data?default"
 	@echo
-	@echo "Loaded /training (asserted) and /training-inferred (+ closure)."
+	@echo "Loaded /training (asserted), /training-inferred (+ materialised closure),"
+	@echo "and /training-reasoned (asserted — the live reasoner infers the rest)."
 	@echo "Fuseki UI: forwarded port 3030. Then: make reveal"
 
-# --- The reasoning reveal: same plain query, with vs without the closure ---
+# --- The reasoning reveal: same plain query, three recipes ---
+# The arc: no reasoning -> you materialise the closure by hand -> the engine does
+# it for you. Same question, same answer, three honest mechanisms.
 
 reveal: load
 	@echo "== Plain geo:isLocatedIn — WITHOUT reasoning (/training): expect nothing =="
@@ -100,12 +106,18 @@ reveal: load
 	      --data-urlencode "query@queries/people-born-in-europe-plain.rq" \
 	      "$(FUSEKI_URL)/training/sparql"
 	@echo
-	@echo "== Plain geo:isLocatedIn — WITH the materialised closure (/training-inferred) =="
+	@echo "== WITH the closure you MATERIALISED by hand (/training-inferred) — make infer =="
 	@curl -s -H "Accept: text/csv" \
 	      --data-urlencode "query@queries/people-born-in-europe-plain.rq" \
 	      "$(FUSEKI_URL)/training-inferred/sparql"
 	@echo
-	@echo "Same query. The closure is the difference — that's what a reasoner buys you."
+	@echo "== ...and now the engine does it for you — a LIVE reasoner (/training-reasoned) =="
+	@curl -s -H "Accept: text/csv" \
+	      --data-urlencode "query@queries/people-born-in-europe-plain.rq" \
+	      "$(FUSEKI_URL)/training-reasoned/sparql"
+	@echo
+	@echo "Same query, same answer, three ways: the query (property path), you"
+	@echo "(materialised), or the engine (live reasoner). That's what a reasoner buys you."
 
 clean:
 	rm -rf $(BUILD)
