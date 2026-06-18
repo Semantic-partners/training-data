@@ -74,12 +74,19 @@ because a slide said so. We're painting a set of possibilities, not a mandate.
 |---|---|---|---|
 | `make people-tarql`  | TARQL — SPARQL CONSTRUCT over CSV | you already think in SPARQL; quick CSV → RDF | ✓ |
 | `make people-rdflib` | plain Python + rdflib | code is what you have; the logic gets fiddly | ✓ |
-| `make people-rml`    | RML / YARRRML (rmlmapper) | declarative mapping, many sources, an open standard | planned |
+| `make people-rml`    | RML / YARRRML (rmlmapper) | declarative mapping, many sources, an open standard | ✓ |
 | `make people-r2rml`  | R2RML over SQLite | the source is a *database*, not a file (pairs with OBDA) | planned |
 
-`make cookbook` runs the recipes and diffs them as canonical N-Triples: same
-triples, different tools. That's the lesson — the **graph is the spec; the
-mapping is a choice.**
+`make cookbook` runs the recipes and diffs them as canonical N-Triples. It's a
+**heads-up, not a pass/fail** — the differences are the lesson. The sharp one:
+vanilla **RML percent-encodes** `New York` → `place/New%20York`, because core RML
+has no string-replace (you'd need an FNML/FnO function); TARQL, rdflib and R2RML
+all slug it to `New_York`. Same job, different tools, different *pains*. The
+graph is the spec; the mapping is a choice — we're painting the possibilities,
+not prescribing one.
+
+(`make people-rml` lazy-fetches `rmlmapper.jar` into `build/` on first run —
+Java's already here for Jena — so it doesn't bloat the image.)
 
 ## Reasoning — the reveal
 

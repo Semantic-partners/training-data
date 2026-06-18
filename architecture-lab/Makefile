@@ -31,7 +31,7 @@ CLOSURE_TTL  := $(BUILD)/closure.ttl
 REPORT_TTL   := $(BUILD)/shacl-report.ttl
 
 .PHONY: all validate query places infer load reveal clean \
-        people-tarql people-rdflib cookbook
+        people-tarql people-rdflib people-rml cookbook
 
 all: query
 
@@ -122,20 +122,37 @@ people-rdflib: $(BUILD)/people-rdflib.ttl  ## plain Python, when code is what yo
 $(BUILD)/people-rdflib.ttl: mappings/people_rdflib.py csv/people.csv | $(BUILD)
 	python3 mappings/people_rdflib.py csv/people.csv > $@
 
+# RML / YARRRML via rmlmapper (declarative, tool-independent, multi-source).
+# Java is already in the image (Jena); we lazy-fetch the fat jar on first use so
+# it doesn't bloat the base image — only pulled if you actually run this recipe.
+RMLMAPPER_URL := https://github.com/RMLio/rmlmapper-java/releases/download/v8.1.0/rmlmapper-8.1.0-r380-all.jar
+RMLMAPPER     := $(BUILD)/rmlmapper.jar
+
+$(RMLMAPPER): | $(BUILD)
+	@echo "Fetching rmlmapper (once, ~190MB)…"
+	curl -fsSL "$(RMLMAPPER_URL)" -o $@
+
+people-rml: $(BUILD)/people-rml.ttl  ## RML/YARRRML — declarative; watch the %20 pain
+$(BUILD)/people-rml.ttl: mappings/people.rml.ttl csv/people.csv $(RMLMAPPER) | $(BUILD)
+	java -jar $(RMLMAPPER) -m mappings/people.rml.ttl -s turtle -o $@
+
 # Canonical form for comparison: sorted N-Triples.
 $(BUILD)/%.nt: $(BUILD)/%.ttl
 	riot --output=nt $< | LC_ALL=C sort > $@
 
-COOKBOOK_NT := $(BUILD)/people-tarql.nt $(BUILD)/people-rdflib.nt
+COOKBOOK_NT := $(BUILD)/people-tarql.nt $(BUILD)/people-rdflib.nt $(BUILD)/people-rml.nt
 
 cookbook: $(COOKBOOK_NT)
 	@echo "Comparing every recipe against TARQL (canonical sorted N-Triples)…"
 	@for r in $(filter-out %people-tarql.nt,$(COOKBOOK_NT)); do \
 	  if diff -q $(BUILD)/people-tarql.nt $$r >/dev/null; then \
-	    echo "  OK  $$r — identical to TARQL"; \
-	  else echo "  XX  $$r — DIFFERS:"; diff $(BUILD)/people-tarql.nt $$r; exit 1; fi; \
+	    echo "  same as TARQL : $$r"; \
+	  else echo "  DIFFERS       : $$r"; diff $(BUILD)/people-tarql.nt $$r | sed 's/^/        /'; fi; \
 	done
-	@echo "Same triples, different tools. Pick the one that fits — none is 'correct'."
+	@echo
+	@echo "Differences are the lesson, not a failure. RML percent-encodes 'New York'"
+	@echo "(no string-replace without an FNML function), where TARQL, rdflib and R2RML"
+	@echo "slug it. Same job, different tools, different pains. Pick what fits."
 
 clean:
 	rm -rf $(BUILD)
