@@ -1,0 +1,42 @@
+# EXPERIMENTAL — live-reasoner variant of config.ttl (spike).
+#
+# Same two services, but /training-inferred is a live Jena InfModel backed by a
+# GenericRuleReasoner with one explicit transitive rule (fuseki/rules.txt),
+# instead of being a plain model pre-loaded with an offline materialised closure.
+#
+#   /training           — asserted, plain. Transitive needs a property path (geo:isLocatedIn+).
+#   /training-inferred  — live reasoner. PLAIN geo:isLocatedIn works because the
+#                         reasoner derives the closure itself, at query time.
+#
+# The question this spike answers: does the InfModel reflect data POSTed via GSP
+# (`make load`) and infer over it — on Fuseki 5.1.0? (Earlier OWLMicro/OWLFB
+# attempts did not.) If yes, this replaces the offline `make infer` step.
+
+@prefix :        <#> .
+@prefix fuseki:  <http://jena.apache.org/fuseki#> .
+@prefix ja:      <http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+:trainingService a fuseki:Service ;
+    fuseki:name "training" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query  ; fuseki:name "sparql" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ; fuseki:name "update" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ; fuseki:name "data" ] ;
+    fuseki:dataset [ a ja:RDFDataset ; ja:defaultGraph [ a ja:MemoryModel ] ] .
+
+:trainingInferredService a fuseki:Service ;
+    fuseki:name "training-inferred" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query  ; fuseki:name "sparql" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ; fuseki:name "data" ] ;
+    fuseki:dataset :infDataset .
+
+:infDataset a ja:RDFDataset ;
+    ja:defaultGraph :infModel .
+
+:infModel a ja:InfModel ;
+    ja:baseModel :baseModel ;
+    ja:reasoner [
+        ja:reasonerURL <http://jena.hpl.hp.com/2003/GenericRuleReasoner> ;
+        ja:rulesFrom <file:///fuseki/rules.txt>
+    ] .
+
+:baseModel a ja:MemoryModel .
