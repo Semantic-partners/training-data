@@ -11,9 +11,17 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "faubulous.mentor"
+        "faubulous.mentor",
+        "ms-python.python"
       ],
       "settings": {
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestArgs": [
+          "--mustrd",
+          "--ignore-focus",
+          "--config=architecture-lab/tests/mustrd-config.ttl"
+        ],
         "mentor.shacl.enabled": true,
         "mentor.sparql.connections": [
           {
