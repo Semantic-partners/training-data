@@ -1,0 +1,89 @@
+@prefix media: <http://media.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+media:Work a rdfs:Class ;
+    rdfs:label "Work" ;
+    skos:definition "A distinct creative or intellectual work recorded in some digital format" .
+
+media:Video a rdfs:Class ;
+    rdfs:label "Video" ;
+    skos:definition "A work that consists of moving images possibly accompanied by a soundtrack" ;
+    rdfs:subClassOf media:Work .
+
+media:Actor a rdfs:Class ;
+    rdfs:label "Actor" ;
+    skos:definition "A person or a group of persons" .
+
+media:Person a rdfs:Class ;
+    rdfs:label "Person" ;
+    skos:definition "An actor that is an individual person" ;
+    rdfs:subClassOf media:Actor .
+
+media:Group a rdfs:Class ;
+    rdfs:label "Person" ;
+    skos:definition "An actor that is a group of persons" ;
+    rdfs:subClassOf media:Actor .
+
+media:Team a rdfs:Class ;
+    rdfs:label "Team" ;
+    skos:definition "A group of members of an organisation who work together on a task or a cluster of interconnected tasks" ;
+    rdfs:subClassOf media:Group .
+
+media:Tool a rdfs:Class ;
+    rdfs:label "Tool" ;
+    skos:definition "Anything that can be used for producing or modifying a work" .
+
+media:Software a rdfs:Class ;
+    rdfs:label "Software" ;
+    skos:definition "A tool that consists in a computer programme or a system of programmes designed for completing a certain type of tasks" ;
+    rdfs:subClassOf media:Tool .
+
+media:PeriodOfTime a rdfs:Class ;
+    rdfs:label "Period Of Time " ;
+    skos:definition "A period or interval of time" .
+
+media:isCreatedBy a owl:ObjectProperty ;
+    rdfs:label "is Created By" ;
+    skos:definition "The relation that obtains between a work and the actor that produced it" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Actor .
+
+media:isExtractedFrom a owl:ObjectProperty ;
+    rdfs:label "is Extracted From" ;
+    skos:definition "The relation that obtains between a work and a pre-existing work from which it has been derived by cutting and editing" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Work .
+
+media:isCreatedWith a owl:ObjectProperty ;
+    rdfs:label "is Created With" ;
+    skos:definition "The relation that obtains between a work and the tools by means of which it was produced" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Tool .
+
+media:isCreatedAtTime a owl:ObjectProperty ;
+    rdfs:label "is Created At Time" ;
+    skos:definition "The relation that obtains between a work and the period of time when it was produced" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:PeriodOfTime .
+
+media:isDeletedBy a owl:ObjectProperty ;
+    rdfs:label "is Deleted By" ;
+    skos:definition "The relation that obtains between a work and the actor that deleted it" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Actor .
+
+media:isDeletedWith a owl:ObjectProperty ;
+    rdfs:label "is Deleted With" ;
+    skos:definition "The relation that obtains between a work and the tools by means of which it was deleted" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Tool .
+
+media:isDeletedAtTime a owl:ObjectProperty ;
+    rdfs:label "is Deleted At Time" ;
+    skos:definition "The relation that obtains between a work and the period of time when it was deleted" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:PeriodOfTime .
+

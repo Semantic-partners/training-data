@@ -1,0 +1,49 @@
+@prefix wemi: <http://wemi.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+wemi:Endeavour a rdfs:Class ;
+    rdfs:label "Endeavour" ;
+    skos:definition "Any product of intellectual or creative endeavour" .
+
+wemi:Work a rdfs:Class ;
+    rdfs:label "Work" ;
+    skos:definition "A distinct creative or intellectual work" ;
+    rdfs:subClassOf wemi:Endeavour .
+
+wemi:Expression a rdfs:Class ;
+    rdfs:label "Expression" ;
+    skos:definition "The expression of a work through a given language or medium" ;
+    rdfs:subClassOf wemi:Endeavour .
+
+wemi:Manifestation a rdfs:Class ;
+    rdfs:label "Manifestation" ;
+    skos:definition "The recording of an expression " ;
+    rdfs:subClassOf wemi:Endeavour .
+
+wemi:Item a rdfs:Class ;
+    rdfs:label "Item" ;
+    skos:definition "An individual physical instance of a manifestation" ;
+    rdfs:subClassOf wemi:Endeavour .
+
+wemi:isRealizationOf a owl:ObjectProperty ;
+    rdfs:label "is Realization Of" ;
+    skos:definition "The relation that obtains between an expression and the work that is expressed by it" ;
+    rdfs:domain wemi:Expression ;
+    rdfs:range wemi:Work .
+
+wemi:isEmbodimentOf a owl:ObjectProperty ;
+    rdfs:label "is Embodiment Of" ;
+    skos:definition "The relation that obtains between a manifestation and the expression recorded by it" ;
+    rdfs:domain wemi:Manifestation ;
+    rdfs:range wemi:Expression .
+
+wemi:isExemplificationOf a owl:ObjectProperty ;
+    rdfs:label "is Exemplification Of" ;
+    skos:definition "The relation that obtains between an item and the manifestation of which it is a physical instance" ;
+    rdfs:domain wemi:Item ;
+    rdfs:range wemi:Manifestation .
+
+

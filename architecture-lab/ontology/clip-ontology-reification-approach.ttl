@@ -1,0 +1,106 @@
+@prefix media: <http://media.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+media:Work a rdfs:Class ;
+    rdfs:label "Work" ;
+    skos:definition "A distinct creative or intellectual work recorded in some digital format" .
+
+media:Video a rdfs:Class ;
+    rdfs:label "Video" ;
+    skos:definition "A work that consists of moving images possibly accompanied by a soundtrack" ;
+    rdfs:subClassOf media:Work .
+
+media:Operation a rdfs:Class ;
+    rdfs:label "Operation" ;
+    skos:definition "An action or event in which a work is created, deleted, or modified" .
+
+media:Actor a rdfs:Class ;
+    rdfs:label "Actor" ;
+    skos:definition "A person or a group of persons" .
+
+media:Person a rdfs:Class ;
+    rdfs:label "Person" ;
+    skos:definition "An actor that is an individual person" ;
+    rdfs:subClassOf media:Actor .
+
+media:Group a rdfs:Class ;
+    rdfs:label "Person" ;
+    skos:definition "An actor that is a group of persons" ;
+    rdfs:subClassOf media:Actor .
+
+media:Team a rdfs:Class ;
+    rdfs:label "Team" ;
+    skos:definition "A group of members of an organisation who work together on a task or a cluster of interconnected tasks" ;
+    rdfs:subClassOf media:Group .
+
+media:Tool a rdfs:Class ;
+    rdfs:label "Tool" ;
+    skos:definition "Anything that can be used for producing or modifying a work" .
+
+media:Software a rdfs:Class ;
+    rdfs:label "Software" ;
+    skos:definition "A tool that consists in a computer programme or a system of programmes designed for completing a certain type of tasks" ;
+    rdfs:subClassOf media:Tool .
+
+media:PeriodOfTime a rdfs:Class ;
+    rdfs:label "Period Of Time " ;
+    skos:definition "A period or interval of time" .
+
+media:isParticipantIn a owl:ObjectProperty ;
+    rdfs:label "is Participant In" ;
+    skos:definition "A relation that obtains between something and an operation in which it is involved" ;
+    rdfs:range media:Operation .
+
+media:actsIn a owl:ObjectProperty ;
+    rdfs:label "acts In" ;
+    skos:definition "The relation that obtains between an actor and an operation performed by that actor" ;
+    rdfs:domain media:Actor ;
+    rdfs:range media:Operation ;
+    rdfs:subPropertyOf media:isParticipantIn .
+
+media:isInputIn a owl:ObjectProperty ;
+    rdfs:label "is Input In" ;
+    skos:definition "The relation that obtains between a work and an operation in which it is processed to produce a certain output" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Operation ;
+    rdfs:subPropertyOf media:isParticipantIn .
+
+media:isOutputIn a owl:ObjectProperty ;
+    rdfs:label "is Output In" ;
+    skos:definition "The relation that obtains between a work and the operation of which that work is the result" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Operation ;
+    rdfs:subPropertyOf media:isParticipantIn .
+
+media:isTargetIn a owl:ObjectProperty ;
+    rdfs:label "is Target In" ;
+    skos:definition "The relation that obtains between a work and an operation of which that work is changed or deleted" ;
+    rdfs:domain media:Work ;
+    rdfs:range media:Operation ;
+    rdfs:subPropertyOf media:isParticipantIn .
+
+media:isInstrumentIn a owl:ObjectProperty ;
+    rdfs:label "is Instrument In" ;
+    skos:definition "The relation that obtains between a tool and an operation in which that tool is used" ;
+    rdfs:domain media:Tool ;
+    rdfs:range media:Operation ;
+    rdfs:subPropertyOf media:isParticipantIn .
+
+media:hasTime a owl:DatatypeProperty ;
+    rdfs:label "has Time" ;
+    skos:definition "The relation that obtains between an operation and the period of time when it occurs" ;
+    rdfs:domain media:Operation ;
+    rdfs:range media:PeriodOfTime .
+
+media:ClipExtraction a rdfs:Class ;
+    rdfs:label "Clip Extraction" ;
+    skos:definition "An operation that consists in the production of a video through the cutting and editing of a pre-existing longer video" ;
+    rdfs:subClassOf media:Operation .
+
+media:Deletion a rdfs:Class ;
+    rdfs:label "Deletion" ;
+    skos:definition "An operation that consists in the destruction of a work" ;
+    rdfs:subClassOf media:Operation .
