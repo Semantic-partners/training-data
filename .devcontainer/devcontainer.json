@@ -29,6 +29,13 @@
             "endpointUrl": "http://fuseki:3030/training-inferred/sparql",
             "configScope": "workspace",
             "storeType": "fuseki"
+          },
+          {
+            "id": "fuseki-training-reasoned",
+            "description": "Fuseki — training-reasoned (asserted + live GenericRuleReasoner)",
+            "endpointUrl": "http://fuseki:3030/training-reasoned/sparql",
+            "configScope": "workspace",
+            "storeType": "fuseki"
           }
         ]
       }
