@@ -1,0 +1,33 @@
+@prefix media: <http://media.org/> .
+@prefix ex: <http://example.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+ex:clip_extraction_1 a media:ClipExtraction ;
+    media:hasTime ex:time_1 .
+
+ex:time_1 a media:PeriodOfTime .
+
+ex:interview_1 a media:Video ;
+    media:isInputIn ex:clip_extraction_1 .
+
+ex:clip_1 a media:Video ;
+    media:isOutputIn ex:clip_extraction_1 .
+
+ex:team_1 a media:Team ;
+    media:actsIn ex:clip_extraction_1 .
+
+ex:editor_1 a media:Software ;
+    media:isInstrumentIn ex:clip_extraction_1 .
+
+ex:clip_deletion_1 a media:Deletion ;
+    media:hasTime ex:time_2 .
+
+ex:time_2 a media:PeriodOfTime .
+
+ex:clip_1 media:isTargetIn ex:clip_deletion_1 .
+
+ex:editor_1 media:isInstrumentIn ex:clip_deletion_1 .
+
