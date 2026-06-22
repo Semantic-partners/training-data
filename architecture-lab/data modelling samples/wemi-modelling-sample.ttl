@@ -1,0 +1,25 @@
+@prefix : <http://example.org/> .
+@prefix wemi: <http://wemi.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+:lego-batman-movie a wemi:Work .
+
+:lego-batman-movie-english-dubbing a wemi:Expression ;
+    rdfs:comment "The Lego Batman Movie dubbed in English" ;
+    wemi:isRealizationOf :lego-batman-movie .
+
+:lego-batman-movie-german-dubbing a wemi:Expression ;
+    rdfs:comment "The Lego Batman Movie dubbed in German" ;
+    wemi:isRealizationOf :lego-batman-movie .
+
+:lego-batman-movie-blue-ray-2017 a wemi:Manifestation ;
+    rdfs:comment "The 2017 Blue Ray of the Lego Batman Movie" ;
+    wemi:isEmbodimentOf :lego-batman-movie-english-dubbing, :lego-batman-movie-german-dubbing .
+
+:johns-lego-batman-movie-blue-ray a wemi:Item ;
+    rdfs:comment "John's copy of the 2017 Blue Ray of the Lego Batman Movie" ;
+    wemi:isExemplificationOf :lego-batman-movie-blue-ray-2017 .
+
