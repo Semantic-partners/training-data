@@ -1,0 +1,32 @@
+# Cookbook recipe — people.csv → RDF with YARRRML (the friendly face of RML).
+#
+# YARRRML is human-readable YAML that compiles to RML (see people.rml.ttl, the
+# turtle this corresponds to). Reach for RML/YARRRML when you want a *declarative*
+# mapping in an open standard, decoupled from any one tool, across many sources.
+#
+# THE PAIN (deliberately on show): a mapping language buys portability by giving
+# up inline logic. There's no string-replace here — so the birth_town IRI comes
+# out percent-encoded ("New%20York"), NOT slugged ("New_York") like the TARQL,
+# rdflib and R2RML recipes. Matching them needs an FNML/FnO function. That gap is
+# the lesson: declarative ≠ free.
+#
+# Compile to RML with the yarrrml-parser (not bundled): `yarrrml-parser -i this`.
+
+prefixes:
+  family: http://family.org/
+  bio: http://example.org/bio/
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+
+mappings:
+  people:
+    sources:
+      - [csv/people.csv~csv]
+    s: http://example.org/person/$(id)
+    po:
+      - [a, family:Person]
+      - [rdfs:label, $(name)]
+      - [bio:birthYear, $(birth_year), xsd:integer]
+      - p: bio:wasBornIn
+        o:
+          value: http://example.org/place/$(birth_town)
+          type: iri

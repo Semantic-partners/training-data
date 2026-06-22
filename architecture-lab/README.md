@@ -23,8 +23,14 @@ architecture-lab/
 ├── csv/                          input
 │   ├── people.csv
 │   └── places.csv
-├── mappings/                     CSV → RDF (TARQL CONSTRUCTs)
-│   ├── people.rq
+├── mappings/                     CSV → RDF — a cookbook of recipes (see below)
+│   ├── people.rq                 TARQL (SPARQL CONSTRUCT over CSV)
+│   ├── people_rdflib.py          plain Python + rdflib
+│   ├── people.yarrrml.yml        YARRRML — the friendly face of RML
+│   ├── people.rml.ttl            RML (executed by rmlmapper)
+│   ├── people.r2rml.ttl          R2RML over SQLite (executed by ontop)
+│   ├── people_to_sqlite.py       loads people.csv into SQLite for R2RML
+│   ├── people.properties         ontop JDBC connection
 │   └── places.rq
 ├── ontology/
 │   └── lab-ontology.ttl          minimal ontology, reuses geo:/family:
@@ -61,6 +67,31 @@ sides exist in one graph, queries can traverse from a person, through
 their birth town, up the transitive `geo:isLocatedIn` chain, to a country
 or continent. That is the whole point — knowledge graphs become useful
 when domains link.
+
+## A mapping cookbook — same data, several ways
+
+Getting CSV into RDF has no single right answer. This lab keeps a small
+*cookbook* of recipes that all turn `people.csv` into the **same triples** — so
+you can weigh the tools on equal ground and pick what fits your context, not
+because a slide said so. We're painting a set of possibilities, not a mandate.
+
+| Recipe | Tool | Reach for it when… | Status |
+|---|---|---|---|
+| `make people-tarql`  | TARQL — SPARQL CONSTRUCT over CSV | you already think in SPARQL; quick CSV → RDF | ✓ |
+| `make people-rdflib` | plain Python + rdflib | code is what you have; the logic gets fiddly | ✓ |
+| `make people-rml`    | RML / YARRRML (rmlmapper) | declarative mapping, many sources, an open standard | ✓ |
+| `make people-r2rml`  | R2RML over SQLite (ontop) | the source is a *database*, not a file (pairs with OBDA) | ✓ |
+
+`make cookbook` runs the recipes and diffs them as canonical N-Triples. It's a
+**heads-up, not a pass/fail** — the differences are the lesson. The sharp one:
+vanilla **RML percent-encodes** `New York` → `place/New%20York`, because core RML
+has no string-replace (you'd need an FNML/FnO function); TARQL, rdflib and R2RML
+all slug it to `New_York`. Same job, different tools, different *pains*. The
+graph is the spec; the mapping is a choice — we're painting the possibilities,
+not prescribing one.
+
+(`make people-rml` lazy-fetches `rmlmapper.jar` into `build/` on first run —
+Java's already here for Jena — so it doesn't bloat the image.)
 
 ## Reasoning — the reveal
 

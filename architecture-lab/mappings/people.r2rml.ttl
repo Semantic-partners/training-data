@@ -1,0 +1,41 @@
+# Cookbook recipe — people (in SQLite) → RDF with R2RML, executed by ontop.
+#
+# R2RML is the W3C standard for mapping RELATIONAL databases to RDF. Reach for it
+# when your source is a database, not a file — and it's the engine under live
+# OBDA/virtualisation (the topology in the Module 2 deck).
+#
+# THE CONTRAST with RML: the slug RML couldn't do without an FNML function, SQL
+# does for free. The logical table is a query, so REPLACE(birth_town,' ','_')
+# happens in the database and the template sees a clean "New_York" — matching
+# TARQL and rdflib. Relational sources come with a transformation language built
+# in; that's the trade for needing a database in the first place.
+#
+#   ontop materialize -m people.r2rml.ttl -p people.properties -f turtle -o out.ttl
+
+@prefix rr:     <http://www.w3.org/ns/r2rml#> .
+@prefix family: <http://family.org/> .
+@prefix bio:    <http://example.org/bio/> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix :       <http://example.org/rules/> .
+
+:people a rr:TriplesMap ;
+    rr:logicalTable [
+        rr:sqlQuery "SELECT id, name, birth_year, REPLACE(birth_town, ' ', '_') AS town_slug FROM people"
+    ] ;
+    rr:subjectMap [
+        rr:template "http://example.org/person/{id}" ;
+        rr:class family:Person
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate rdfs:label ;
+        rr:objectMap [ rr:column "name" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate bio:birthYear ;
+        rr:objectMap [ rr:column "birth_year" ; rr:datatype xsd:integer ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate bio:wasBornIn ;
+        rr:objectMap [ rr:template "http://example.org/place/{town_slug}" ; rr:termType rr:IRI ]
+    ] .

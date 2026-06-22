@@ -30,7 +30,8 @@ INFERRED_TTL := $(BUILD)/graph-inferred.ttl
 CLOSURE_TTL  := $(BUILD)/closure.ttl
 REPORT_TTL   := $(BUILD)/shacl-report.ttl
 
-.PHONY: all validate query places infer load reveal clean
+.PHONY: all validate query places infer load reveal clean \
+        people-tarql people-rdflib people-rml people-r2rml cookbook
 
 all: query
 
@@ -118,6 +119,76 @@ reveal: load
 	@echo
 	@echo "Same query, same answer, three ways: the query (property path), you"
 	@echo "(materialised), or the engine (live reasoner). That's what a reasoner buys you."
+
+# --- A mapping cookbook: the same people.csv → the same triples, several ways ---
+#
+# Not "the" way to map — a palette. Each recipe is standalone; reach for the one
+# that fits your context. `make cookbook` proves they all emit identical triples
+# (canonical sorted N-Triples — our data has no blank nodes, so this is exact).
+
+people-tarql: $(BUILD)/people-tarql.ttl    ## SPARQL CONSTRUCT over CSV
+$(BUILD)/people-tarql.ttl: mappings/people.rq csv/people.csv | $(BUILD)
+	tarql mappings/people.rq csv/people.csv > $@
+
+people-rdflib: $(BUILD)/people-rdflib.ttl  ## plain Python, when code is what you have
+$(BUILD)/people-rdflib.ttl: mappings/people_rdflib.py csv/people.csv | $(BUILD)
+	python3 mappings/people_rdflib.py csv/people.csv > $@
+
+# RML / YARRRML via rmlmapper (declarative, tool-independent, multi-source).
+# Java is already in the image (Jena); we lazy-fetch the fat jar on first use so
+# it doesn't bloat the base image — only pulled if you actually run this recipe.
+RMLMAPPER_URL := https://github.com/RMLio/rmlmapper-java/releases/download/v8.1.0/rmlmapper-8.1.0-r380-all.jar
+RMLMAPPER     := $(BUILD)/rmlmapper.jar
+
+$(RMLMAPPER): | $(BUILD)
+	@echo "Fetching rmlmapper (once, ~190MB)…"
+	curl -fsSL "$(RMLMAPPER_URL)" -o $@
+
+people-rml: $(BUILD)/people-rml.ttl  ## RML/YARRRML — declarative; watch the %20 pain
+$(BUILD)/people-rml.ttl: mappings/people.rml.ttl csv/people.csv $(RMLMAPPER) | $(BUILD)
+	java -jar $(RMLMAPPER) -m mappings/people.rml.ttl -s turtle -o $@
+
+# R2RML over a SQLite database (ontop). R2RML maps *relational* sources, so first
+# load the CSV into SQLite (stdlib sqlite3). The slug RML needed an FNML function
+# for, SQL does for free in the logical query. ontop CLI + sqlite-jdbc lazy-fetched.
+ONTOP_URL       := https://github.com/ontop/ontop/releases/download/ontop-5.5.0/ontop-cli-5.5.0.zip
+SQLITE_JDBC_URL := https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.53.2.0/sqlite-jdbc-3.53.2.0.jar
+ONTOP           := $(BUILD)/ontop/ontop
+PEOPLE_DB       := $(BUILD)/people.db
+
+$(PEOPLE_DB): mappings/people_to_sqlite.py csv/people.csv | $(BUILD)
+	python3 mappings/people_to_sqlite.py csv/people.csv $@
+
+$(ONTOP): | $(BUILD)
+	@echo "Fetching ontop CLI + sqlite-jdbc (once)…"
+	curl -fsSL "$(ONTOP_URL)" -o $(BUILD)/ontop.zip
+	rm -rf $(BUILD)/ontop && mkdir -p $(BUILD)/ontop
+	unzip -oq $(BUILD)/ontop.zip -d $(BUILD)/ontop
+	curl -fsSL "$(SQLITE_JDBC_URL)" -o $(BUILD)/ontop/jdbc/sqlite-jdbc.jar
+	chmod +x $(ONTOP)
+
+people-r2rml: $(BUILD)/people-r2rml.ttl  ## R2RML over SQLite — SQL slugs cleanly
+$(BUILD)/people-r2rml.ttl: mappings/people.r2rml.ttl mappings/people.properties $(PEOPLE_DB) $(ONTOP) | $(BUILD)
+	$(ONTOP) materialize -m mappings/people.r2rml.ttl -p mappings/people.properties -f turtle -o $@
+
+# Canonical form for comparison: sorted N-Triples.
+$(BUILD)/%.nt: $(BUILD)/%.ttl
+	riot --output=nt $< | LC_ALL=C sort > $@
+
+COOKBOOK_NT := $(BUILD)/people-tarql.nt $(BUILD)/people-rdflib.nt \
+               $(BUILD)/people-rml.nt $(BUILD)/people-r2rml.nt
+
+cookbook: $(COOKBOOK_NT)
+	@echo "Comparing every recipe against TARQL (canonical sorted N-Triples)…"
+	@for r in $(filter-out %people-tarql.nt,$(COOKBOOK_NT)); do \
+	  if diff -q $(BUILD)/people-tarql.nt $$r >/dev/null; then \
+	    echo "  same as TARQL : $$r"; \
+	  else echo "  DIFFERS       : $$r"; diff $(BUILD)/people-tarql.nt $$r | sed 's/^/        /'; fi; \
+	done
+	@echo
+	@echo "Differences are the lesson, not a failure. RML percent-encodes 'New York'"
+	@echo "(no string-replace without an FNML function), where TARQL, rdflib and R2RML"
+	@echo "slug it. Same job, different tools, different pains. Pick what fits."
 
 clean:
 	rm -rf $(BUILD)
