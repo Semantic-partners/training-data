@@ -1,0 +1,15 @@
+@prefix :            <https://mustrd.org/mustrdTest/> .
+@prefix triplestore: <https://mustrd.org/triplestore/> .
+
+# mustrd run config for the lab. Paths are relative to this file (tests/).
+# Specs + their data live here; we run against the in-process rdflib store, so
+# no triplestore needs to be up.
+#
+# Run (from architecture-lab/):
+#   pytest --mustrd --config=tests/mustrd-config.ttl
+
+:lab_rdflib a :MustrdTest ;
+    :hasSpecPath         "." ;
+    :hasDataPath         "." ;
+    :hasPytestPath       "." ;
+    :filterOnTripleStore triplestore:RdfLib .

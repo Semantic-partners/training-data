@@ -42,6 +42,9 @@ architecture-lab/
 │   ├── people-born-in-europe-plain.rq  plain form — needs the materialised closure
 │   ├── infer-locatedin.rq              materialises the transitive closure
 │   └── places-in-continent.rq
+├── tests/                        mustrd given/when/then specs
+│   ├── infer-closure.mustrd.ttl       tests the closure enrichment step
+│   └── mustrd-config.ttl
 ├── Makefile                      pipeline glue
 └── README.md
 ```
@@ -57,6 +60,7 @@ make places       # query the geographic side only
 make infer        # materialise the transitive closure (build/graph-inferred.ttl)
 make load         # load all three datasets: /training, /training-inferred (+ closure), /training-reasoned
 make reveal       # the reasoning reveal — same plain query, three ways (none / materialised / live reasoner)
+make test         # run the mustrd specs (given/when/then over the queries)
 make clean        # wipe build/
 ```
 
@@ -122,4 +126,7 @@ engine does it for you.** Same question, same answer, three mechanisms.
   an SP-internal pipeline tool; the lab substitutes a plain SPARQL
   `CONSTRUCT` (via `arq`) for the same purpose. Same shape, no internal
   dependency.
-- **mustrd test layer.** Tests will be added as part of the broader CI rig.
+- **mustrd test layer (started).** One worked example is in —
+  `tests/infer-closure.mustrd.ttl` tests the closure enrichment step
+  (`queries/infer-locatedin.rq`): given two hops, the CONSTRUCT must derive the
+  third. Run it with `make test`. Fuller coverage lands with the CI rig.

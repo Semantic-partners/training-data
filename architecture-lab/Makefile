@@ -190,5 +190,11 @@ cookbook: $(COOKBOOK_NT)
 	@echo "(no string-replace without an FNML function), where TARQL, rdflib and R2RML"
 	@echo "slug it. Same job, different tools, different pains. Pick what fits."
 
+# --- Tests: mustrd given/when/then specs over the lab's queries ---
+# Standalone .PHONY so this doesn't collide with the main target list.
+.PHONY: test
+test:
+	pytest --mustrd --config=tests/mustrd-config.ttl
+
 clean:
 	rm -rf $(BUILD)
