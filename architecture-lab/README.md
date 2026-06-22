@@ -49,8 +49,8 @@ make all          # ingest both CSVs, merge with ontology, run the cross-domain 
 make validate     # run pyshacl against the merged graph
 make places       # query the geographic side only
 make infer        # materialise the transitive closure (build/graph-inferred.ttl)
-make load         # load /training (asserted) and /training-inferred (+ closure) into Fuseki
-make reveal       # the reasoning reveal — same plain query, with vs without the closure
+make load         # load all three datasets: /training, /training-inferred (+ closure), /training-reasoned
+make reveal       # the reasoning reveal — same plain query, three ways (none / materialised / live reasoner)
 make clean        # wipe build/
 ```
 
@@ -64,23 +64,26 @@ when domains link.
 
 ## Reasoning — the reveal
 
-`geo:isLocatedIn` is declared `owl:TransitiveProperty` in the ontology. There
-are two ways to get the transitive closure (London → UK → Europe):
+`geo:isLocatedIn` is transitive: London → UK → Europe. There are **three** honest
+ways to get that closure, and the lab runs all three against the *same plain
+query* (`people-born-in-europe-plain.rq`) — a little cookbook of reasoning:
 
-- **Property path** — query with `geo:isLocatedIn+`. Works on the asserted
-  graph, no reasoner. That's `people-born-in-europe.rq`.
-- **Materialised closure** — assert every reachable `(a → c)` up front, then
-  query with plain `geo:isLocatedIn`. `make infer` builds the closure with an
-  `arq` CONSTRUCT (`infer-locatedin.rq`) — exactly what a forward-chaining
-  reasoner does, made explicit — and `make load` puts it in `/training-inferred`.
+- **Property path** — query with `geo:isLocatedIn+`. No reasoner, no extra data;
+  the *query* walks the chain. That's `people-born-in-europe.rq`, on `/training`.
+- **Materialised closure** — assert every reachable `(a → c)` up front, then query
+  with plain `geo:isLocatedIn`. `make infer` builds it with an `arq` CONSTRUCT
+  (`infer-locatedin.rq`) — a forward-chaining reasoner made explicit; the inferred
+  triples sit in `build/closure.ttl`, right there to read — and `make load` puts
+  them in `/training-inferred`. *You* did the reasoning.
+- **Live reasoner** — same asserted data, behind a Jena `GenericRuleReasoner`
+  (`.devcontainer/fuseki/rules.txt`) on `/training-reasoned`. Plain
+  `geo:isLocatedIn` works because the *engine* derives the closure itself, on
+  load — no offline step.
 
-`make reveal` runs the *same plain query* (`people-born-in-europe-plain.rq`)
-against both Fuseki datasets: nothing from `/training`, the full answer from
-`/training-inferred`. That gap is what a reasoner buys you.
-
-(We materialise the closure rather than run a live reasoner: it's reliable,
-transparent — `build/closure.ttl` is the inferred triples, right there to
-inspect — and free of Jena's InfModel-over-a-mutated-store quirks.)
+`make reveal` runs the same plain query against `/training`, `/training-inferred`
+and `/training-reasoned`: nothing from the first, the full answer from the other
+two. The arc is the lesson — **no reasoning → you materialise it by hand → the
+engine does it for you.** Same question, same answer, three mechanisms.
 
 ## What's deliberately missing
 
