@@ -129,4 +129,6 @@ engine does it for you.** Same question, same answer, three mechanisms.
 - **mustrd test layer (started).** One worked example is in —
   `tests/infer-closure.mustrd.ttl` tests the closure enrichment step
   (`queries/infer-locatedin.rq`): given two hops, the CONSTRUCT must derive the
-  third. Run it with `make test`. Fuller coverage lands with the CI rig.
+  third. Run it with `make test` — or from VS Code's **Testing** panel in the
+  Codespace (pytest is pre-wired in `.devcontainer/devcontainer.json`). Fuller
+  coverage lands with the CI rig.
