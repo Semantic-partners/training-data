@@ -1,0 +1,32 @@
+@prefix must:  <https://mustrd.org/model/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix geo:   <http://geo.org/> .
+@prefix place: <http://example.org/place/> .
+@prefix :      <https://semanticpartners.com/data/sptr-lab/> .
+
+# Example mustrd spec for an ENRICHMENT step.
+#
+# Tests queries/infer-locatedin.rq — the CONSTRUCT that materialises the
+# transitive closure of geo:isLocatedIn. Given two hops (London → UK → Europe),
+# the enrichment must derive the third pair: London → Europe. Given / When / Then,
+# the same shape as a Cucumber scenario, but over RDF.
+#
+# Run (from architecture-lab/):  make test
+
+:inferLocatedInClosure
+    a must:TestSpec ;
+
+    must:given [ a must:StatementsDataset ;
+        must:hasStatement
+            [ a rdf:Statement ; rdf:subject place:London ;         rdf:predicate geo:isLocatedIn ; rdf:object place:United_Kingdom ] ,
+            [ a rdf:Statement ; rdf:subject place:United_Kingdom ; rdf:predicate geo:isLocatedIn ; rdf:object place:Europe ] ] ;
+
+    must:when  [ a must:FileSparqlSource ;
+        must:fileurl   <file://./../queries/infer-locatedin.rq> ;
+        must:queryType must:ConstructSparql ] ;
+
+    must:then  [ a must:StatementsDataset ;
+        must:hasStatement
+            [ a rdf:Statement ; rdf:subject place:London ;         rdf:predicate geo:isLocatedIn ; rdf:object place:United_Kingdom ] ,
+            [ a rdf:Statement ; rdf:subject place:United_Kingdom ; rdf:predicate geo:isLocatedIn ; rdf:object place:Europe ] ,
+            [ a rdf:Statement ; rdf:subject place:London ;         rdf:predicate geo:isLocatedIn ; rdf:object place:Europe ] ] .

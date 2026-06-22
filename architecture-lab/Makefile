@@ -107,5 +107,11 @@ reveal: load
 	@echo
 	@echo "Same query. The closure is the difference — that's what a reasoner buys you."
 
+# --- Tests: mustrd given/when/then specs over the lab's queries ---
+# Standalone .PHONY so this doesn't collide with the main target list.
+.PHONY: test
+test:
+	pytest --mustrd --config=tests/mustrd-config.ttl
+
 clean:
 	rm -rf $(BUILD)
