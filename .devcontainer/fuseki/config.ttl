@@ -48,3 +48,16 @@
     ] .
 
 :reasonedBase a ja:MemoryModel .
+
+# --- Day-1 "Intro to Knowledge Graphs" labs ---------------------------------
+# The film/person graph (rdf_movie_example.ttl) in its own WRITABLE dataset, so
+# the SPARQL INSERT/DELETE labs (deck module 4) can mutate it without touching
+# the architecture-lab data. SELECT/ASK labs can run here too, or via Mentor
+# straight against the .ttl file. In-memory; .devcontainer/load-movies.sh
+# (re)loads the seed — re-run it to RESET after an update lab.
+:moviesService a fuseki:Service ;
+    fuseki:name "movies" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query  ; fuseki:name "sparql" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ; fuseki:name "update" ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ; fuseki:name "data" ] ;
+    fuseki:dataset [ a ja:RDFDataset ; ja:defaultGraph [ a ja:MemoryModel ] ] .
