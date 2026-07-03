@@ -50,7 +50,7 @@
 :reasonedBase a ja:MemoryModel .
 
 # --- Day-1 "Intro to Knowledge Graphs" labs ---------------------------------
-# The film/person graph (rdf_movie_example.ttl) in its own WRITABLE dataset, so
+# The film/person graph (sparql_movie_examples.ttl) in its own WRITABLE dataset, so
 # the SPARQL INSERT/DELETE labs (deck module 4) can mutate it without touching
 # the architecture-lab data. SELECT/ASK labs can run here too, or via Mentor
 # straight against the .ttl file. In-memory; .devcontainer/load-movies.sh

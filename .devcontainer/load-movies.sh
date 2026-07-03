@@ -9,7 +9,7 @@
 set -uo pipefail
 
 FUSEKI_URL="${FUSEKI_URL:-http://fuseki:3030}"
-SEED="$(cd "$(dirname "$0")/.." && pwd)/rdf_movie_example.ttl"
+SEED="$(cd "$(dirname "$0")/.." && pwd)/sparql_movie_examples.ttl"
 
 printf "Loading %s into %s/movies (replace) ... " "$(basename "$SEED")" "$FUSEKI_URL"
 if curl -fsS -X PUT -H "Content-Type: text/turtle" --data-binary "@$SEED" \
