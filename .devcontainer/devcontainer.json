@@ -29,28 +29,28 @@
             "description": "Fuseki — training (asserted)",
             "endpointUrl": "http://fuseki:3030/training/sparql",
             "configScope": "workspace",
-            "storeType": "fuseki"
+            "storeType": "sparql"
           },
           {
             "id": "fuseki-training-inferred",
             "description": "Fuseki — training-inferred (asserted + materialised closure)",
             "endpointUrl": "http://fuseki:3030/training-inferred/sparql",
             "configScope": "workspace",
-            "storeType": "fuseki"
+            "storeType": "sparql"
           },
           {
             "id": "fuseki-training-reasoned",
             "description": "Fuseki — training-reasoned (asserted + live GenericRuleReasoner)",
             "endpointUrl": "http://fuseki:3030/training-reasoned/sparql",
             "configScope": "workspace",
-            "storeType": "fuseki"
+            "storeType": "sparql"
           },
           {
             "id": "fuseki-movies",
             "description": "Fuseki — movies (Day-1 KG labs; writable for INSERT/DELETE)",
             "endpointUrl": "http://fuseki:3030/movies/sparql",
             "configScope": "workspace",
-            "storeType": "fuseki"
+            "storeType": "sparql"
           }
         ]
       }
