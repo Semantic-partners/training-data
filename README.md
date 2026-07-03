@@ -10,8 +10,10 @@ The Day-1 labs split by what they need:
 - **Update labs (INSERT / DELETE)** — need a live triplestore (the point is to
   mutate, then re-query and see the change). The devcontainer serves a writable
   Fuseki dataset **`/movies`**, pre-loaded with `sparql_movie_examples.ttl` on start.
-  Run updates from the Fuseki UI (forwarded port 3030) or the `movies` Mentor
-  connection. **Reset** the data after mutating it: `bash .devcontainer/load-movies.sh`.
+  Run them in the **Fuseki UI** (forwarded port 3030) with the endpoint set to
+  **`/movies`** — it serves both queries and updates, so reads and writes share
+  one endpoint. (Mentor is query-only; it can't run INSERT/DELETE.) **Reset** the
+  data after mutating it: `bash .devcontainer/load-movies.sh`.
 
 ## SHACL
 Individual data sets for SHACL labs. Solution for first SHACL lab. Examples of constraint components, helpful links.
