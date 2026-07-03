@@ -38,7 +38,7 @@ That pair *is* the reasoning demo — see `architecture-lab` (`make reveal`).
 **Validate one SHACL lab** (lab 1 is the only one with a worked shape in this repo; you write the rest):
 
 ```bash
-pyshacl -s "SHACL shapes/lab_1_sh_class.ttl" \
+pyshacl -s "SHACL shapes/lab_1_sh_class_shape.ttl" \
         -d "SHACL data graph/lab_1_sh_class.ttl" \
         -f human
 ```

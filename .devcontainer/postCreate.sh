@@ -43,7 +43,7 @@ fi
 echo "──────────────────────────────────────────────────"
 echo
 echo "Try a SHACL lab end-to-end:"
-echo "  pyshacl -s 'SHACL shapes/lab_1_sh_class.ttl' -d 'SHACL data graph/lab_1_sh_class.ttl' -f human"
+echo "  pyshacl -s 'SHACL shapes/lab_1_sh_class_shape.ttl' -d 'SHACL data graph/lab_1_sh_class.ttl' -f human"
 echo
 echo "Day-1 Intro-to-KG SPARQL labs (movie data):"
 echo "  • SELECT/ASK labs : Mentor against the file — FROM <workspace:/sparql_movie_examples.ttl>"
