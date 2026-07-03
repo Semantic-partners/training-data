@@ -55,8 +55,15 @@
 # the architecture-lab data. SELECT/ASK labs can run here too, or via Mentor
 # straight against the .ttl file. In-memory; .devcontainer/load-movies.sh
 # (re)loads the seed — re-run it to RESET after an update lab.
+#
+# Both query AND update are also served at the dataset base URL (the unnamed
+# endpoints below), so the lab can point the Fuseki UI at just /movies and run
+# reads and writes from one endpoint — no switching to /movies/update. The
+# named /movies/sparql and /movies/update endpoints are kept for scripting.
 :moviesService a fuseki:Service ;
     fuseki:name "movies" ;
+    fuseki:endpoint [ fuseki:operation fuseki:query ] ;
+    fuseki:endpoint [ fuseki:operation fuseki:update ] ;
     fuseki:endpoint [ fuseki:operation fuseki:query  ; fuseki:name "sparql" ] ;
     fuseki:endpoint [ fuseki:operation fuseki:update ; fuseki:name "update" ] ;
     fuseki:endpoint [ fuseki:operation fuseki:gsp-rw ; fuseki:name "data" ] ;
