@@ -44,6 +44,13 @@
             "endpointUrl": "http://fuseki:3030/training-reasoned/sparql",
             "configScope": "workspace",
             "storeType": "fuseki"
+          },
+          {
+            "id": "fuseki-movies",
+            "description": "Fuseki — movies (Day-1 KG labs; writable for INSERT/DELETE)",
+            "endpointUrl": "http://fuseki:3030/movies/sparql",
+            "configScope": "workspace",
+            "storeType": "fuseki"
           }
         ]
       }
