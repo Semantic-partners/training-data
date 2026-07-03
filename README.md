@@ -1,10 +1,7 @@
 # training-data
 
-## Represeting data as graphs
-Examples from this module in RDF format (Turtle).
-
 ## Querying Graphs with SPARQL
-Data set needed for SPARQL queries in RDF format (Turtle). Solution for first query (.rq).
+`sparql_movie_examples.ttl` — the film/person dataset for the Day-1 KG modules (representing data as graphs, and the SPARQL query/update labs). Solution for the first query in `sparql_query_solution.rq`.
 
 The Day-1 labs split by what they need:
 
