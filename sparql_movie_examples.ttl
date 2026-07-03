@@ -44,6 +44,13 @@ dbr:Orson_Welles rdf:type dbo:Person ;
     dbo:birthPlace <http://dbpedia.org/resource/Kenosha,_Wisconsin> ;
     dbo:birthDate "1915-05-06"^^xsd:date .
 
+# A Bristol-born dog — Rex, the same dog as the /demo/sparql-matching demo.
+# NOT a dbo:Person — so the unconstrained "anything born in Bristol" query
+# (Lab 2) catches him, and adding `?s a dbo:Person` (Lab 3) filters him out.
+dbr:Rex rdf:type dbo:Dog ;
+    rdfs:label "Rex"@en ;
+    dbo:birthPlace dbr:Bristol .
+
 dbr:North_by_Northwest dbo:starring dbr:Cary_Grant ,
     dbr:Eva_Marie_Saint .
 
