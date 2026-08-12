@@ -62,7 +62,9 @@ Workflow:
 
 example:
 ```
-SELECT {
+SELECT distinct ?s where
+
+{
 
     ?s onto:myProperty ?o1;
         onto:myProperty ?o2.
