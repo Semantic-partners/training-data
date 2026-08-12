@@ -62,9 +62,8 @@ Workflow:
 
 example:
 ```
-SELECT distinct ?s where
-
-{
+SELECT distinct ?s
+where {
 
     ?s onto:myProperty ?o1;
         onto:myProperty ?o2.
