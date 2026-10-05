@@ -1,17 +1,23 @@
-@prefix must: <https://mustrd.org/model/> .
-@prefix cq:   <https://mustrd.org/competencyQuestion/> .
-@prefix sh:   <http://www.w3.org/ns/shacl#> .
-@prefix :     <https://semanticpartners.com/data/sptr-lab/> .
+@prefix must:  <https://mustrd.org/model/> .
+@prefix cq:    <https://mustrd.org/competencyQuestion/> .
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix place: <http://example.org/place/> .
+@prefix :      <https://semanticpartners.com/data/sptr-lab/> .
 
-# CQ: "Which continent is each place in?"
+# CQ: "Which places are in Europe?"
 #
 # The geographic side on its own — queries/places-in-continent.rq walks the
-# transitive geo:isLocatedIn chain (town → country → continent). Ordered by
-# continent, then place, so the expected rows carry sh:order.
+# transitive geo:isLocatedIn chain (town → country → continent). The query is
+# generic over ?continent; this spec binds ?continent to place:Europe with
+# must:hasBinding, so the same query file answers the question for one
+# continent. North American places in the data must NOT appear — they're the
+# distractor that proves the binding narrows the answer.
+#
+# Ordered by continent, then place, so the expected rows carry sh:order.
 
-:placesInContinentCQ
+:placesInEuropeCQ
     a cq:CompetencyQuestion ;
-    cq:question "Which continent is each place in?" ;
+    cq:question "Which places are in Europe?" ;
     cq:cqSpec :placesInContinent .
 
 :placesInContinent
@@ -19,7 +25,10 @@
     must:given [ a must:FileDataset ; must:file "people-and-places.ttl" ] ;
     must:when  [ a must:FileSparqlSource ;
                  must:file "../../queries/places-in-continent.rq" ;
-                 must:queryType must:SelectSparql ] ;
+                 must:queryType must:SelectSparql ;
+                 # Bind the continent the question asks about, rather than
+                 # hard-coding it in the query text.
+                 must:hasBinding [ must:variable "continent" ; must:boundValue place:Europe ] ] ;
     must:then  [ a must:TableDataset ;
         must:hasRow
             [ sh:order 1 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Finland" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
@@ -27,8 +36,4 @@
             [ sh:order 3 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "London" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
             [ sh:order 4 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Netherlands" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
             [ sh:order 5 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Rotterdam" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
-            [ sh:order 6 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "United Kingdom" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
-            [ sh:order 7 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Milwaukee" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ],
-            [ sh:order 8 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "New York" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ],
-            [ sh:order 9 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Paoli" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ],
-            [ sh:order 10 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "United States" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ] ] .
+            [ sh:order 6 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "United Kingdom" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ] ] .

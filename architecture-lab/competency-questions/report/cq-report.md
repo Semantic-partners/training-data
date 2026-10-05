@@ -89,8 +89,8 @@ _3 competency questions — 2 with a test, 1 without._
 | Competency Question | Test | Test Status | Coverage Status |
 |---------------------|------|-------------|-----------------|
 | In which year was each person born? | — | — | — |
-| Which continent is each place in? | [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | ✅ passed | ✅ passed |
 | Which people were born in Europe? | [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl)<br>[people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | ✅ passed<br>✅ passed | ✅ passed<br>✅ passed |
+| Which places are in Europe? | [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | ✅ passed | ✅ passed |
 
 
 ### Not used by any CQ
@@ -105,13 +105,13 @@ _none — every declared term is exercised by a competency question or is struct
 - **In which year was each person born?**
   - _no linked test_
 
-- **Which continent is each place in?**
-  - test: [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) — _passed_
-  - in data:  bio:birthYear, bio:wasBornIn, family:Person, geo1:Continent, geo1:Country, geo1:Town, geo1:isLocatedIn
-  - in query: geo1:Continent, geo1:isLocatedIn
-
 - **Which people were born in Europe?**
   - test: [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) — _passed_
   - test: [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) — _passed_
   - in data:  bio:birthYear, bio:wasBornIn, family:Person, geo1:Continent, geo1:Country, geo1:Town, geo1:isLocatedIn
   - in query: bio:wasBornIn, family:Person, geo1:isLocatedIn
+
+- **Which places are in Europe?**
+  - test: [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) — _passed_
+  - in data:  bio:birthYear, bio:wasBornIn, family:Person, geo1:Continent, geo1:Country, geo1:Town, geo1:isLocatedIn
+  - in query: geo1:Continent, geo1:isLocatedIn

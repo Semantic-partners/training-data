@@ -139,16 +139,16 @@ one story.
 | Competency question | Query | Test |
 |---|---|---|
 | *Which people were born in Europe?* | `people-born-in-europe.rq` (property path) **and** `people-born-in-europe-plain.rq` (over the materialised closure) | `specs/people-born-in-europe.mustrd.ttl`: one CQ, two specs, the same answer both ways (the `make reveal` arc, as a test) |
-| *Which continent is each place in?* | `places-in-continent.rq` | `specs/places-in-continent.mustrd.ttl` |
+| *Which places are in Europe?* | `places-in-continent.rq`, with `?continent` bound to `place:Europe` | `specs/places-in-continent.mustrd.ttl`: the query stays generic and the spec binds the continent the question asks about |
 | *In which year was each person born?* | — none yet | `specs/birth-year.mustrd.ttl`: a CQ with **no test**, recorded as a requirement before anyone has answered it |
 
 A CQ is a `cq:CompetencyQuestion` node with the question text, linked to its
 test(s) by `cq:cqSpec`:
 
 ```turtle
-:placesInContinentCQ
+:placesInEuropeCQ
     a cq:CompetencyQuestion ;
-    cq:question "Which continent is each place in?" ;
+    cq:question "Which places are in Europe?" ;
     cq:cqSpec :placesInContinent .
 
 :placesInContinent
@@ -156,9 +156,16 @@ test(s) by `cq:cqSpec`:
     must:given [ a must:FileDataset ; must:file "people-and-places.ttl" ] ;
     must:when  [ a must:FileSparqlSource ;
                  must:file "../../queries/places-in-continent.rq" ;
-                 must:queryType must:SelectSparql ] ;
+                 must:queryType must:SelectSparql ;
+                 must:hasBinding [ must:variable "continent" ;
+                                   must:boundValue place:Europe ] ] ;
     must:then  [ a must:TableDataset ; must:hasRow … ] .
 ```
+
+`must:hasBinding` fixes a query variable before the query runs, so one generic
+query file can answer a specific question. The North American places in the
+data are the distractor: if the binding didn't narrow the answer, they would
+appear and the test would fail.
 
 The `given` data (`data/people-and-places.ttl`) is the two CSVs as RDF: the
 same triples the TARQL mappings produce, saved as a fixed file so the CQs don't
