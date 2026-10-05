@@ -18,6 +18,8 @@
 #   make infer     — materialise the transitive closure (build/graph-inferred.ttl)
 #   make load      — load both graphs into Fuseki (/training and /training-inferred)
 #   make reveal    — the reasoning reveal: plain geo:isLocatedIn, with vs without closure
+#   make test      — run the mustrd specs
+#   make cq        — run the competency questions + coverage report
 #   make clean     — wipe build/
 
 BUILD := build
@@ -195,6 +197,14 @@ cookbook: $(COOKBOOK_NT)
 .PHONY: test
 test:
 	pytest --mustrd --config=tests/mustrd-config.ttl
+
+# --- Competency questions: the lab's questions as tests, with coverage ---
+# Each CQ runs a query from queries/ against ontology/lab-ontology.ttl, and the
+# report shows which ontology terms the CQs exercise. Needs mustrd >= 0.8.0.
+.PHONY: cq
+cq:
+	cd competency-questions && pytest . --mustrd --config=mustrd-config.ttl \
+	  --term-coverage --cq --md=report/cq-report.md
 
 clean:
 	rm -rf $(BUILD)

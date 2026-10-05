@@ -66,4 +66,4 @@ ENV FUSEKI_URL=http://fuseki:3030
 RUN pip install --no-cache-dir \
         rdflib \
         pyshacl \
-        mustrd
+        "mustrd==0.8.0rc5"

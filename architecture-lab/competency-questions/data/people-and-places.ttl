@@ -1,0 +1,35 @@
+# Instance data for the competency-question suite: the lab's two CSVs
+# (csv/people.csv, csv/places.csv) as RDF — the same triples the TARQL
+# mappings (mappings/people.rq, mappings/places.rq) produce, frozen as a
+# fixture so the CQ tests don't depend on running the pipeline first.
+
+@prefix bio:    <http://example.org/bio/> .
+@prefix family: <http://family.org/> .
+@prefix geo:    <http://geo.org/> .
+@prefix person: <http://example.org/person/> .
+@prefix place:  <http://example.org/place/> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+
+# --- places ---
+place:London a geo:Town ; rdfs:label "London" ; geo:isLocatedIn place:United_Kingdom .
+place:Rotterdam a geo:Town ; rdfs:label "Rotterdam" ; geo:isLocatedIn place:Netherlands .
+place:New_York a geo:Town ; rdfs:label "New York" ; geo:isLocatedIn place:United_States .
+place:Milwaukee a geo:Town ; rdfs:label "Milwaukee" ; geo:isLocatedIn place:United_States .
+place:Helsinki a geo:Town ; rdfs:label "Helsinki" ; geo:isLocatedIn place:Finland .
+place:Paoli a geo:Town ; rdfs:label "Paoli" ; geo:isLocatedIn place:United_States .
+place:United_Kingdom a geo:Country ; rdfs:label "United Kingdom" ; geo:isLocatedIn place:Europe .
+place:Netherlands a geo:Country ; rdfs:label "Netherlands" ; geo:isLocatedIn place:Europe .
+place:United_States a geo:Country ; rdfs:label "United States" ; geo:isLocatedIn place:North_America .
+place:Finland a geo:Country ; rdfs:label "Finland" ; geo:isLocatedIn place:Europe .
+place:Europe a geo:Continent ; rdfs:label "Europe" .
+place:North_America a geo:Continent ; rdfs:label "North America" .
+
+# --- people ---
+person:p1 a family:Person ; rdfs:label "Ada Lovelace" ; bio:birthYear 1815 ; bio:wasBornIn place:London .
+person:p2 a family:Person ; rdfs:label "Alan Turing" ; bio:birthYear 1912 ; bio:wasBornIn place:London .
+person:p3 a family:Person ; rdfs:label "Edsger Dijkstra" ; bio:birthYear 1930 ; bio:wasBornIn place:Rotterdam .
+person:p4 a family:Person ; rdfs:label "Grace Hopper" ; bio:birthYear 1906 ; bio:wasBornIn place:New_York .
+person:p5 a family:Person ; rdfs:label "Tim Berners-Lee" ; bio:birthYear 1955 ; bio:wasBornIn place:London .
+person:p6 a family:Person ; rdfs:label "Donald Knuth" ; bio:birthYear 1938 ; bio:wasBornIn place:Milwaukee .
+person:p7 a family:Person ; rdfs:label "Linus Torvalds" ; bio:birthYear 1969 ; bio:wasBornIn place:Helsinki .
+person:p8 a family:Person ; rdfs:label "Margaret Hamilton" ; bio:birthYear 1936 ; bio:wasBornIn place:Paoli .

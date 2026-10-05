@@ -1,0 +1,52 @@
+@prefix must: <https://mustrd.org/model/> .
+@prefix cq:   <https://mustrd.org/competencyQuestion/> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix :     <https://semanticpartners.com/data/sptr-lab/> .
+
+# CQ: "Which people were born in Europe?"
+#
+# The lab's headline cross-domain question: person → bio:wasBornIn → town →
+# geo:isLocatedIn … → Europe. ONE competency question, answered TWO ways — the
+# same arc as `make reveal`:
+#
+#   1. queries/people-born-in-europe.rq        property path (geo:isLocatedIn+)
+#                                               over the asserted data
+#   2. queries/people-born-in-europe-plain.rq  plain geo:isLocatedIn over the
+#                                               data PLUS the materialised closure
+#
+# Both must give the same answer. The queries ORDER BY ?personLabel, so the
+# expected rows carry sh:order.
+
+:peopleBornInEuropeCQ
+    a cq:CompetencyQuestion ;
+    cq:question "Which people were born in Europe?" ;
+    cq:cqSpec :peopleBornInEurope , :peopleBornInEuropeMaterialised .
+
+:peopleBornInEurope
+    a must:TestSpec ;
+    must:given [ a must:FileDataset ; must:file "people-and-places.ttl" ] ;
+    must:when  [ a must:FileSparqlSource ;
+                 must:file "../../queries/people-born-in-europe.rq" ;
+                 must:queryType must:SelectSparql ] ;
+    must:then  [ a must:TableDataset ;
+        must:hasRow
+            [ sh:order 1 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Ada Lovelace" ] ,    [ must:variable "townLabel" ; must:boundValue "London" ] ] ,
+            [ sh:order 2 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Alan Turing" ] ,     [ must:variable "townLabel" ; must:boundValue "London" ] ] ,
+            [ sh:order 3 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Edsger Dijkstra" ] , [ must:variable "townLabel" ; must:boundValue "Rotterdam" ] ] ,
+            [ sh:order 4 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Linus Torvalds" ] ,  [ must:variable "townLabel" ; must:boundValue "Helsinki" ] ] ,
+            [ sh:order 5 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Tim Berners-Lee" ] , [ must:variable "townLabel" ; must:boundValue "London" ] ] ] .
+
+:peopleBornInEuropeMaterialised
+    a must:TestSpec ;
+    must:given [ a must:FileDataset ; must:file "people-and-places.ttl" ] ,
+               [ a must:FileDataset ; must:file "closure.ttl" ] ;
+    must:when  [ a must:FileSparqlSource ;
+                 must:file "../../queries/people-born-in-europe-plain.rq" ;
+                 must:queryType must:SelectSparql ] ;
+    must:then  [ a must:TableDataset ;
+        must:hasRow
+            [ sh:order 1 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Ada Lovelace" ] ,    [ must:variable "townLabel" ; must:boundValue "London" ] ] ,
+            [ sh:order 2 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Alan Turing" ] ,     [ must:variable "townLabel" ; must:boundValue "London" ] ] ,
+            [ sh:order 3 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Edsger Dijkstra" ] , [ must:variable "townLabel" ; must:boundValue "Rotterdam" ] ] ,
+            [ sh:order 4 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Linus Torvalds" ] ,  [ must:variable "townLabel" ; must:boundValue "Helsinki" ] ] ,
+            [ sh:order 5 ; must:hasBinding [ must:variable "personLabel" ; must:boundValue "Tim Berners-Lee" ] , [ must:variable "townLabel" ; must:boundValue "London" ] ] ] .

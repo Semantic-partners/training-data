@@ -1,0 +1,34 @@
+@prefix must: <https://mustrd.org/model/> .
+@prefix cq:   <https://mustrd.org/competencyQuestion/> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix :     <https://semanticpartners.com/data/sptr-lab/> .
+
+# CQ: "Which continent is each place in?"
+#
+# The geographic side on its own — queries/places-in-continent.rq walks the
+# transitive geo:isLocatedIn chain (town → country → continent). Ordered by
+# continent, then place, so the expected rows carry sh:order.
+
+:placesInContinentCQ
+    a cq:CompetencyQuestion ;
+    cq:question "Which continent is each place in?" ;
+    cq:cqSpec :placesInContinent .
+
+:placesInContinent
+    a must:TestSpec ;
+    must:given [ a must:FileDataset ; must:file "people-and-places.ttl" ] ;
+    must:when  [ a must:FileSparqlSource ;
+                 must:file "../../queries/places-in-continent.rq" ;
+                 must:queryType must:SelectSparql ] ;
+    must:then  [ a must:TableDataset ;
+        must:hasRow
+            [ sh:order 1 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Finland" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
+            [ sh:order 2 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Helsinki" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
+            [ sh:order 3 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "London" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
+            [ sh:order 4 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Netherlands" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
+            [ sh:order 5 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Rotterdam" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
+            [ sh:order 6 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "United Kingdom" ] , [ must:variable "continentLabel" ; must:boundValue "Europe" ] ],
+            [ sh:order 7 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Milwaukee" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ],
+            [ sh:order 8 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "New York" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ],
+            [ sh:order 9 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "Paoli" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ],
+            [ sh:order 10 ; must:hasBinding [ must:variable "placeLabel" ; must:boundValue "United States" ] , [ must:variable "continentLabel" ; must:boundValue "North America" ] ] ] .

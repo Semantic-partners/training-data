@@ -1,0 +1,14 @@
+# The materialised transitive closure of geo:isLocatedIn for the CQ fixture —
+# the extra (a → c) pairs that `make infer` (queries/infer-locatedin.rq) adds
+# in build/closure.ttl. Loaded alongside people-and-places.ttl so the PLAIN
+# query (no property path) can answer the same competency question.
+
+@prefix geo:   <http://geo.org/> .
+@prefix place: <http://example.org/place/> .
+
+place:London geo:isLocatedIn place:Europe .
+place:Rotterdam geo:isLocatedIn place:Europe .
+place:New_York geo:isLocatedIn place:North_America .
+place:Milwaukee geo:isLocatedIn place:North_America .
+place:Helsinki geo:isLocatedIn place:Europe .
+place:Paoli geo:isLocatedIn place:North_America .

@@ -1,0 +1,15 @@
+@prefix cq: <https://mustrd.org/competencyQuestion/> .
+@prefix :   <https://semanticpartners.com/data/sptr-lab/> .
+
+# CQ: "In which year was each person born?"
+#
+# A competency question with NO test yet. The ontology declares bio:birthYear
+# and the data populates it, but nothing in queries/ asks about it — so the
+# requirement is recorded here, and the CQ report shows it as a gap.
+#
+# Exercise: write queries/people-by-birth-year.rq, then add a must:TestSpec here
+# and link it with cq:cqSpec. The gap closes.
+
+:birthYearCQ
+    a cq:CompetencyQuestion ;
+    cq:question "In which year was each person born?" .
