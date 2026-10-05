@@ -139,7 +139,7 @@ one story.
 | Competency question | Query | Test |
 |---|---|---|
 | *Which people were born in Europe?* | `people-born-in-europe.rq` (property path) **and** `people-born-in-europe-plain.rq` (over the materialised closure) | `specs/people-born-in-europe.mustrd.ttl`: one CQ, two specs, the same answer both ways (the `make reveal` arc, as a test) |
-| *Which places are in Europe?* | `places-in-continent.rq`, with `?continent` bound to `place:Europe` | `specs/places-in-continent.mustrd.ttl`: the query stays generic and the spec binds the continent the question asks about |
+| *Which places are in Europe?* | `places-in-continent.rq`, with `?continent` bound to `place:Europe` | `specs/places-in-europe.mustrd.ttl`: the query stays generic and the spec binds the continent the question asks about |
 | *In which year was each person born?* | — none yet | `specs/birth-year.mustrd.ttl`: a CQ with **no test**, recorded as a requirement before anyone has answered it |
 
 A CQ is a `cq:CompetencyQuestion` node with the question text, linked to its
@@ -149,9 +149,9 @@ test(s) by `cq:cqSpec`:
 :placesInEuropeCQ
     a cq:CompetencyQuestion ;
     cq:question "Which places are in Europe?" ;
-    cq:cqSpec :placesInContinent .
+    cq:cqSpec :placesInEurope .
 
-:placesInContinent
+:placesInEurope
     a must:TestSpec ;
     must:given [ a must:FileDataset ; must:file "people-and-places.ttl" ] ;
     must:when  [ a must:FileSparqlSource ;

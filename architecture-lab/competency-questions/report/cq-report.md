@@ -27,32 +27,32 @@ Classes are arranged by `rdfs:subClassOf` (indented `↳` under their superclass
 | family:Person | class | ✅ | ✅ | · | ✅ covered | ✅ covered |
 | &nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
-| &nbsp;&nbsp;&nbsp;&nbsp;• [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | | ✅ | ❌ | · | | |
+| &nbsp;&nbsp;&nbsp;&nbsp;• [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;▸ bio:birthYear | property | ✅ | ❌ | · | ✅ covered | ✅ covered |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | | ✅ | ❌ | · | | |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;▸ bio:wasBornIn | property | ✅ | ✅ | · | ✅ covered | ✅ covered |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | | ✅ | ❌ | · | | |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | geo1:GeographicRegion | class | ❌ | ❌ | ✅ | 🔧 structural | 🔧 structural |
 | &nbsp;&nbsp;&nbsp;&nbsp;▸ geo1:isLocatedIn | property | ✅ | ✅ | · | ✅ covered | ✅ covered |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | | ✅ | ✅ | · | | |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;↳ geo1:Continent | class | ✅ | ✅ | · | ✅ covered | ✅ covered |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | | ✅ | ✅ | · | | |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | | ✅ | ✅ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;↳ geo1:Country | class | ✅ | ❌ | · | ✅ covered | ✅ covered |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | | ✅ | ❌ | · | | |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;↳ geo1:Town | class | ✅ | ❌ | · | ✅ covered | ✅ covered |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | | ✅ | ❌ | · | | |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | | ✅ | ❌ | · | | |
 
 #### How to read this table
 
@@ -90,7 +90,7 @@ _3 competency questions — 2 with a test, 1 without._
 |---------------------|------|-------------|-----------------|
 | In which year was each person born? | — | — | — |
 | Which people were born in Europe? | [people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl)<br>[people-born-in-europe.mustrd.ttl](../specs/people-born-in-europe.mustrd.ttl) | ✅ passed<br>✅ passed | ✅ passed<br>✅ passed |
-| Which places are in Europe? | [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) | ✅ passed | ✅ passed |
+| Which places are in Europe? | [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) | ✅ passed | ✅ passed |
 
 
 ### Not used by any CQ
@@ -112,6 +112,6 @@ _none — every declared term is exercised by a competency question or is struct
   - in query: bio:wasBornIn, family:Person, geo1:isLocatedIn
 
 - **Which places are in Europe?**
-  - test: [places-in-continent.mustrd.ttl](../specs/places-in-continent.mustrd.ttl) — _passed_
+  - test: [places-in-europe.mustrd.ttl](../specs/places-in-europe.mustrd.ttl) — _passed_
   - in data:  bio:birthYear, bio:wasBornIn, family:Person, geo1:Continent, geo1:Country, geo1:Town, geo1:isLocatedIn
   - in query: geo1:Continent, geo1:isLocatedIn

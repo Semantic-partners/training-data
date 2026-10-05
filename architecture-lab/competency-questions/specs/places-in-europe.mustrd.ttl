@@ -18,9 +18,9 @@
 :placesInEuropeCQ
     a cq:CompetencyQuestion ;
     cq:question "Which places are in Europe?" ;
-    cq:cqSpec :placesInContinent .
+    cq:cqSpec :placesInEurope .
 
-:placesInContinent
+:placesInEurope
     a must:TestSpec ;
     must:given [ a must:FileDataset ; must:file "people-and-places.ttl" ] ;
     must:when  [ a must:FileSparqlSource ;
