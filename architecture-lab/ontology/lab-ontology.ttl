@@ -10,6 +10,9 @@
 # Reuses the geo:* vocabulary from the Day-1 geospatial exercise so the
 # work from that exercise carries through.
 
+<https://semanticpartners.com/data/sptr-lab/ontology> a owl:Ontology ;
+    rdfs:comment "Minimal ontology for the architecture lab: people, places, and the bio:wasBornIn bridge between them." .
+
 # --- Persons (from the Day-1 Family exercise vocabulary) ---
 
 family:Person a rdfs:Class ;

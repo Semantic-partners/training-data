@@ -1,0 +1,17 @@
+@prefix :            <https://mustrd.org/mustrdTest/> .
+@prefix triplestore: <https://mustrd.org/triplestore/> .
+
+# Competency-question suite for the architecture lab. Paths are relative to
+# this file. The CQs are the lab's own questions: each spec runs a query from
+# ../queries/ against the lab ontology, so the questions, the queries and the
+# ontology are one story.
+#
+# Run (from architecture-lab/):  make cq
+
+:labCompetencyQuestions
+    a :MustrdTest ;
+    :hasSpecPath     "specs" ;
+    :hasDataPath     "data" ;
+    :hasOntologyPath "../ontology/lab-ontology.ttl" ;
+    :hasPytestPath   "cq" ;
+    :filterOnTripleStore triplestore:RdfLib .

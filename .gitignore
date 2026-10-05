@@ -1,3 +1,4 @@
 
 # architecture-lab build artifacts
 architecture-lab/build/
+**/.pytest_cache/
