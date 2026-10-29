@@ -13,6 +13,7 @@
 # Targets:
 #   make all       — build the graph and run the cross-domain query
 #   make validate  — run SHACL against the graph
+#   make report    — same validation, written as RDF to build/shacl-report.ttl
 #   make query     — list people born in Europe (property-path form)
 #   make places    — list places by continent
 #   make infer     — materialise the transitive closure (build/graph-inferred.ttl)
@@ -30,9 +31,10 @@ PLACES_TTL   := $(BUILD)/places.ttl
 GRAPH_TTL    := $(BUILD)/graph.ttl
 INFERRED_TTL := $(BUILD)/graph-inferred.ttl
 CLOSURE_TTL  := $(BUILD)/closure.ttl
+SHAPES_TTL   := $(BUILD)/shapes.ttl
 REPORT_TTL   := $(BUILD)/shacl-report.ttl
 
-.PHONY: all validate query places infer load reveal clean \
+.PHONY: all validate report query places infer load reveal clean \
         people-tarql people-rdflib people-rml people-r2rml cookbook
 
 all: query
@@ -55,8 +57,24 @@ $(GRAPH_TTL): $(PEOPLE_TTL) $(PLACES_TTL) ontology/lab-ontology.ttl | $(BUILD)
 
 # --- Layer 3: validate ---
 
-validate: $(GRAPH_TTL) shapes/people.ttl shapes/places.ttl
-	pyshacl -s shapes/people.ttl -s shapes/places.ttl -d $(GRAPH_TTL) -f human
+# pyshacl's -s takes ONE shapes graph. Passing -s twice does not merge them --
+# argparse keeps only the last, so shapes/people.ttl was silently ignored.
+# Merge into one graph first, then validate against the union.
+# (-d is --debug, not the data graph; the data graph is positional.)
+
+$(SHAPES_TTL): shapes/people.ttl shapes/places.ttl | $(BUILD)
+	riot --formatted=ttl $^ > $@
+
+validate: $(GRAPH_TTL) $(SHAPES_TTL)
+	pyshacl -s $(SHAPES_TTL) -f human $(GRAPH_TTL)
+
+# The same validation as RDF: a sh:ValidationReport you can load beside the
+# data it describes. pyshacl exits 1 when the data does not conform but still
+# writes the file, so the leading '-' lets make carry on.
+report: $(REPORT_TTL)
+$(REPORT_TTL): $(GRAPH_TTL) $(SHAPES_TTL) | $(BUILD)
+	-pyshacl -s $(SHAPES_TTL) -f turtle -o $@ $(GRAPH_TTL)
+	@echo "Validation report written to $@"
 
 # --- Layer 4: query (file-based, no server needed) ---
 
